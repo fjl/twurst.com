@@ -1,0 +1,4 @@
+<FilesMatch "\.(|woff|ttf|eot|svg)$">
+Header set Cache-Control "max-age=290304000, public"
+</FilesMatch>
+
