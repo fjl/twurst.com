@@ -70,9 +70,13 @@ Website = (function () {
   }
 
   function init() {
-    // sort accounts by length
     var sorted = $$('#accounts li').sort(compLength);
     $('accounts').adopt(sorted);
+
+    $$('span.mail').each(function (e) {
+      addr = e.get('text').replace(/ \[dot\] /, '.').replace(/ \[at\] /, '@');
+      e.set('html', '<a href="mailto:' + addr + '">' + addr + '</a>');
+    });
 
     markdownify();
   }
