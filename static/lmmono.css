@@ -1,0 +1,7 @@
+@font-face {
+	font-family: 'LatinModernMonoRegular';
+	src: url('lmmono10-regular-webfont.eot');
+	src: local('☺'), url('lmmono10-regular-webfont.woff') format('woff'), url('lmmono10-regular-webfont.ttf') format('truetype'), url('lmmono10-regular-webfont.svg#webfontThQaD2ST') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
