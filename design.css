@@ -3,9 +3,11 @@ body {
   color: #FFFAFA;
   font-family: LatinModernMonoRegular, Latin Modern Mono, monospace;
   font-size: 13pt;
+  line-height: 1.4em;
 }
 #frame {
-  max-width: 900px;
+  min-width: 60ex;
+  max-width: 110ex;
 }
 a:link, a:hover, a:active, a:visited {
   color: #FFFAFA;

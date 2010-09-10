@@ -7,7 +7,7 @@ Website = (function () {
     $$('h1').each(function (e) {
       if (!e.hasClass('_headlineMarkdownified')) {
         var tw = e.get('text').length;
-        var c = e.get('html') + '<br>' + repeat('=', tw);
+        var c = e.get('html') + '<br/>' + repeat('=', tw);
         e.set('html', c);
         e.addClass('_headlineMarkdownified');
       }
