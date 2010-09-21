@@ -34,7 +34,7 @@ Website = (function () {
 
   // splits off sentence end character if present
   function wpart(str) {
-    res = /(.*?)([.?!])$/.exec(str)
+    res = /(.*?)([.:?!])$/.exec(str)
     if (res != null)
       return [res[1], res[2]];
     else
