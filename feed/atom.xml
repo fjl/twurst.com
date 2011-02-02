@@ -1,0 +1,27 @@
+---
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>twurst.com blog</title>
+  <link href="http://twurst.com/feed/atom.xml" rel="self" type="application/atom+xml" />
+  <link href="http://twurst.com/" rel="alternate" type="text/html" />
+  <id>http://twurst.com/</id>
+  <updated>{{ site.time }}</updated>
+  <author>
+    <name>Felix Lange</name>
+    <email>fjl@twurst.com</email>
+  </author>
+
+{% for p in site.posts %}
+  <entry>
+    <title>{{ p.title }}</title>
+    <link href="http://twurst.com/{{p.url}}"/>
+    <updated>{{ p.date }}</updated>
+    <id>{{ p.id }}</id>
+    <content type="html">
+      {{ p.content | xml_escape }}
+    </content>
+  </entry>
+{% endfor %}
+
+</feed>

@@ -13,6 +13,8 @@ For matters most urgent, you may send electronic mail to
 
 Blog Posts
 ==========
+Also available as [atom](/feed/atom.xml)/[rss](/feed/rss.xml) feed.
+
 <ul>
 {% for p in site.posts %}
 <li><span class="pdate">{{p.date | date: "%Y-%m-%d"}} »</span> <a href="{{ p.url }}">{{ p.title }}</a></li>
