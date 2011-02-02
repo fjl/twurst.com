@@ -1,12 +1,21 @@
 Website = (function () {
+  var dashWidth = 8;
+
   function compLength(a, b) { return a.get('text').length - b.get('text').length; }
   function repeat(str, n) { return new Array(n + 1).join(str); }
+
+  function markdownifyHR() {
+    $$('hr').each(function (e) {
+      e.set('html', repeat('-', Math.floor(e.getWidth() / dashWidth)));
+      e.addClass('_ruleMarkdownified');
+    });
+  }
 
   function markdownify() {
     // add =s under h1 headlines
     $$('h1').each(function (e) {
       if (!e.hasClass('_headlineMarkdownified')) {
-        var tw = e.get('text').length;
+        var tw = Math.min(Math.floor(e.getWidth() / dashWidth), e.get("text").length);
         var c = e.get('html') + '<br/>' + repeat('=', tw);
         e.set('html', c);
         e.addClass('_headlineMarkdownified');
@@ -30,6 +39,8 @@ Website = (function () {
         e.addClass('_listItemMarkdownified');
       }
     });
+
+    markdownifyHR();
   }
 
   // splits off sentence end character if present
@@ -69,9 +80,26 @@ Website = (function () {
     markdownify();
   }
 
+  function resize() {
+    dashWidth = $('dashwidthHack').getWidth();
+    markdownifyHR();
+  }
+
+  // ripped off http://stackoverflow.com/questions/995914/catch-browsers-zoom-event-in-javascript/3596295#3596295
+  // Poll the pixel width of the window; invoke resize() if the width has been changed.
+  var lastWidth = 0;
+  function pollZoomFireEvent() {
+    var widthNow = $(window).getWidth();
+    if (lastWidth == widthNow) return;
+    lastWidth = widthNow;
+    // width changed, user must have zoomed.
+    resize();
+  }
+
   function init() {
-    var sorted = $$('#accounts li').sort(compLength);
-    $('accounts').adopt(sorted);
+    var ruleText = new Element('span', {id: 'dashwidthHack', html: '-', styles: {position: 'absolute', left: '-3000px'}});
+    $$('body').adopt(ruleText);
+    dashWidth = ruleText.getWidth();
 
     $$('span.mail').each(function (e) {
       addr = e.get('text').replace(/ \[dot\] /, '.').replace(/ \[at\] /, '@');
@@ -79,9 +107,11 @@ Website = (function () {
     });
 
     markdownify();
+    setInterval(pollZoomFireEvent, 100);
   }
 
   window.addEvent('domready', init);
+  window.addEvent('resize', resize);
 
   return { twitter: displayTwitterStatuses };
 })();

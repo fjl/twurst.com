@@ -1,31 +1,72 @@
 body {
   background-color: #0D041C;
   color: #FFFAFA;
-  font-family: LatinModernMonoRegular, Latin Modern Mono, monospace;
-  font-size: 13pt;
+  font-family: "Dejavu Sans Mono", "Menlo", "Andale Mono", monospace;
+  font-size: 11pt;
   line-height: 1.4em;
 }
+
 #frame {
   min-width: 60ex;
   max-width: 110ex;
 }
+
 a:link, a:hover, a:active, a:visited {
   color: #FFFAFA;
 }
+
 h1, h2, h3, h4, h5 {
   font-size: inherit;
   font-weight: normal;
-  margin-bottom: 0.5em;
   margin-top: 1em;
 }
+
+h1 {
+  display: inline-block;
+}
+
 p {
-  margin: 0;
+  margin: 0 0 0 0;
 }
-#top {
-  margin-top: 0;
+
+hr {
+  color: #ccc;
+  margin: 0.5em 0 0.5em 0;
+  line-height: 1em;
 }
-ul {
+
+hr._ruleMarkdownified {
+  border: 0;
+}
+
+ul, ol {
   margin: 0;
   padding: 0 0 0 1em;
 }
 
+pre {
+  margin-left: 2em;
+  font: inherit;
+}
+
+code {
+  font: inherit;
+  color: #ccc;
+}
+
+/* Posts */
+.pdate, .pdate-right {
+  color: #ccc;
+}
+
+.pdate-right {
+  float: right;
+}
+
+.ptext {
+  width: 80%;
+}
+
+.ptext p {
+  margin-bottom: 1em;
+}
