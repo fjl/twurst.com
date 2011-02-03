@@ -2,9 +2,14 @@ body {
  /* background-color: #0D041C; */
   background-color: #0a0f0a;
   color: #ccc;
-  font-family: "Dejavu Sans Mono", "Menlo", "Andale Mono", monospace;
+  font-family: "Dejavu Sans Mono", "Menlo", "Bitstream Vera Sans Mono", 
+               "Panic Sans", "Droid Sans Mono", monospace;
   font-size: 11pt;
   line-height: 1.4em;
+}
+
+* {
+  padding: 0;
 }
 
 #frame {
@@ -24,10 +29,11 @@ h1, h2, h3, h4, h5 {
 
 h1 {
   display: inline-block;
+  line-height: 1.1em;
 }
 
 p {
-  margin: 0 0 0 0;
+  margin: 0.3em 0 0 0;
 }
 
 hr {
@@ -40,7 +46,7 @@ hr._ruleMarkdownified {
 }
 
 ul, ol {
-  margin: 0.5em 0 0 0;
+  margin: 0.3em 0 0 0;
   padding: 0 0 0 1em;
 }
 
@@ -49,12 +55,34 @@ pre {
   font: inherit;
 }
 
-code {
+#content {
+  margin: 3ex 1.1ex;
+}
+
+#logo, code {
   font: inherit;
   color: #cceeaa;
+  margin-left: 0;
+}
+
+#logo:hover {
+  color: #ffffff;
+}
+
+#logolink:link,
+#logolink:hover,
+#logolink:active,
+#logolink:visited {
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
 }
 
 /* Posts */
+.ptitle {
+  margin: 0;
+}
+
 .pdate-right {
   float: right;
 }

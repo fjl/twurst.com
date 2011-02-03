@@ -1,8 +1,6 @@
 ---
-layout: default
+layout: root
 ---
-Hello, My Name Is
-=================
 This is the personal homepage of Felix Lange.  I like building software (using [Erlang](http://erlang.org),
 [Ruby](http://ruby-lang.org) and [Racket](http://racket-lang.org)) as well as creating music with my friends.
 I study computer science at the University of [Magdeburg, Germany][maps].
