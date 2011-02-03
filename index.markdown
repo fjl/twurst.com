@@ -23,6 +23,7 @@ Me, Elsewhere
 =============
 - [XING](https://www.xing.com/profile/Felix_Lange11), anyone?
 - My [Stack Overflow account](http://stackoverflow.com/users/252612/felix-lange)
+- I slash the web with [blekko](http://blekko.com/user/fjl)
 - I'm [@fmakunbound](http://twitter.com/fmakunbound) on Twitter
 - My [listening history](http://last.fm/user/polenkommutator) is on last.fm
 - I host some of my projects [on GitHub](http://github.com/fjl)
