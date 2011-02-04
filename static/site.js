@@ -5,9 +5,11 @@ Website = (function () {
   function repeat(str, n) { return new Array(n + 1).join(str); }
 
   function markdownifyHR() {
-    $$('hr').each(function (e) {
-      e.set('html', repeat('-', Math.floor(e.getWidth() / dashWidth)));
-      e.addClass('_ruleMarkdownified');
+    $$('hr').each(function (hr) {
+      new Element('p', {'class': '_ruleMarkdownified'}).replaces(hr);
+    });
+    $$('p._ruleMarkdownified').each(function (el) {
+      el.set('html', repeat('-', Math.floor(el.getWidth() / dashWidth)));
     });
   }
 
@@ -15,7 +17,7 @@ Website = (function () {
     // add =s under h1 headlines
     $$('h1').each(function (e) {
       if (!e.hasClass('_headlineMarkdownified')) {
-        var tw = Math.min(Math.floor(e.getWidth() / dashWidth), e.get("text").length);
+        var tw = Math.min(Math.round(e.getWidth() / dashWidth), e.get("text").length);
         var c = e.get('html') + '<br/>' + repeat('=', tw);
         e.set('html', c);
         e.addClass('_headlineMarkdownified');
@@ -113,5 +115,5 @@ Website = (function () {
   window.addEvent('domready', init);
   window.addEvent('resize', resize);
 
-  return { twitter: displayTwitterStatuses };
+  return { rm: markdownifyHR, twitter: displayTwitterStatuses };
 })();

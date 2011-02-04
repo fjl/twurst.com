@@ -37,12 +37,13 @@ p {
 }
 
 hr {
-  margin: 0.5em 0 0.5em 0;
-  line-height: 1em;
+  margin: 1ex 0 1ex 0;
+  border: 1px solid #999;
 }
 
-hr._ruleMarkdownified {
-  border: 0;
+p._ruleMarkdownified {
+  color: #999;
+  margin: 0;
 }
 
 ul, ol {
@@ -56,13 +57,17 @@ pre {
 }
 
 #content {
-  margin: 3ex 1.1ex;
+  margin: 1ex 1.1ex;
 }
 
 #logo, code {
   font: inherit;
   color: #cceeaa;
   margin-left: 0;
+}
+
+#logo {
+  line-height: 1.3em;
 }
 
 #logo:hover {
