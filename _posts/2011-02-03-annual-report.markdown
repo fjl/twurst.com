@@ -24,7 +24,7 @@ and it's an ongoing challenge that I enjoy facing every single day.
 
 The downside to all this funky, work-related stuff is that I'm sort-of
 ditching my computer science studies. I didn't finish a single subject this semester
-and as far as I can see, that record isn't not going to be improved with the next one.
+and as far as I can see, that record isn't going to be improved with the next one.
 I'm looking forward to better times, though, as I intend to enroll for a bachelor degree course
 in philosophy next winter. That's something I always wanted in a corner of my heart,
 so I figure that _now_ might be a better time than never. I'm really looking forward to that
