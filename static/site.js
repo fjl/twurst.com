@@ -87,11 +87,17 @@ Website = (function () {
       var headline = new Element('h1', {id: 'lastfm-headline', text: 'Recent Last.fm Tracks'});
       var list = new Element('table');
       data.recenttracks.track.forEach(function (t) {
+        var bullet = liChar;
+        if (t['@attr'] && t['@attr'].nowplaying && t['@attr'].nowplaying == 'true') {
+          bullet = '&#9654;&nbsp;';
+        }
+        var artist = t.artist['#text'];
+        var artistLink = 'http://last.fm/music/' + encodeURIComponent(t.artist['#text']);
         new Element('tr').adopt([
-          new Element('td', {html: liChar}),
-          new Element('td', {html: t.artist['#text']}),
+          new Element('td', {html: bullet}),
+          new Element('td').grab(new Element('a', {href: artistLink, html: artist})),
           new Element('td', {html: '&nbsp;&mdash;&nbsp;'}),
-          new Element('td').grab(new Element('a', {href: t.url, html: t.name}))
+          new Element('td', {html: t.name})
         ]).inject(list);
       });
       document.id('lastfm').empty().adopt([headline, list]);
