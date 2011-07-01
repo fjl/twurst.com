@@ -12,6 +12,10 @@ body {
   padding: 0;
 }
 
+td {
+  vertical-align: top;
+}
+
 #frame {
   min-width: 60ex;
   max-width: 110ex;

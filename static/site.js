@@ -1,5 +1,6 @@
 Website = (function () {
   var dashWidth = 8;
+  var liChar = '*&nbsp;'
 
   function compLength(a, b) { return a.get('text').length - b.get('text').length; }
   function repeat(str, n) { return new Array(n + 1).join(str); }
@@ -13,33 +14,31 @@ Website = (function () {
     });
   }
 
-  function markdownify() {
+  function markdownifyH1(e) {
+    if (!e.hasClass('_headlineMarkdownified')) {
+      var tw = Math.min(Math.round(e.getWidth() / dashWidth), e.get("text").length);
+      var c = e.get('html') + '<br/>' + repeat('=', tw);
+      e.set('html', c);
+      e.addClass('_headlineMarkdownified');
+    }
+    return e;
+  }
+
+  function markdownify(el) {
     // add =s under h1 headlines
-    $$('h1').each(function (e) {
-      if (!e.hasClass('_headlineMarkdownified')) {
-        var tw = Math.min(Math.round(e.getWidth() / dashWidth), e.get("text").length);
-        var c = e.get('html') + '<br/>' + repeat('=', tw);
-        e.set('html', c);
-        e.addClass('_headlineMarkdownified');
-      }
-    });
+    $$('h1').each(markdownifyH1);
 
     // put * in front of li tags
-    var liChar = '*'
-    $$('li').each(function (e) {
-      if (!e.hasClass('_listItemMarkdownified')) {
-        var t = new Element('table', {styles: {padding: '0', 'border-collapse': 'collapse'}}).grab(
-          new Element('tr', {styles: {padding: '0'}}).adopt([
-            new Element('td', {html: liChar + '&nbsp;', styles: {padding: '0', 'vertical-align': 'top'}}),
-            new Element('td', {html: e.get('html'), styles: {padding: '0'}})
-          ])
-        );
-        e.empty()
-        e.grab(t);
-        e.setStyle('list-style-type', 'none');
-        e.getParent().setStyle('padding-left', '0');
-        e.addClass('_listItemMarkdownified');
+    $$('ul').each(function (e) {
+      var t = new Element('table', {styles: {padding: '0'}});
+      var items = e.children;
+      for (var i = 0; i < items.length; i++) {
+        new Element('tr', {styles: {padding: '0'}}).adopt([
+          new Element('td', {html: liChar, styles: {padding: '0'}}),
+          new Element('td', {html: items.item(i).get('html'), styles: {padding: '0'}})
+        ]).inject(t);
       }
+      t.replaces(e);
     });
 
     markdownifyHR();
@@ -69,17 +68,33 @@ Website = (function () {
     }).join(' ');
   }
 
-  function displayTwitterStatuses(stats) {
-    headline = new Element('h1', {html: 'Recent Twitter Statuses'});
-    texts = new Element('ul');
-    stats.each(function (s) {
-      var li = new Element('li', {html: formatStatus(s.text)});
-      li.inject(texts);
-    });
-    $('twitter').grab(headline);
-    $('twitter').grab(texts);
+  function displayTwitterStatuses(data) {
+    var headline = new Element('h1', {text: 'Recent Twitter Statuses'});
+    var list = new Element('table').adopt(
+      data.map(function (status) {
+        return new Element('tr').adopt([
+          new Element('td', {html: liChar}),
+          new Element('td', {html: formatStatus(status.text)})
+        ]);
+      })
+    );
+    document.id('twitter').empty().adopt([headline, list]);
+  }
 
-    markdownify();
+  function displayLastfmTracks(data) {
+    if (data.recenttracks != undefined) {
+      var headline = new Element('h1', {text: 'Recent Last.fm Tracks'});
+      var list = new Element('table');
+      var tracks = data.recenttracks.track.forEach(function (t) {
+        new Element('tr').adopt([
+          new Element('td', {html: liChar}),
+          new Element('td', {html: t.artist['#text']}),
+          new Element('td', {html: '&nbsp;--&nbsp;'}),
+          new Element('td').grab(new Element('a', {href: t.url, html: t.name}))
+        ]).inject(list);
+      });
+      document.id('lastfm').empty().adopt([headline, list]);
+    }
   }
 
   function resize() {
@@ -115,5 +130,5 @@ Website = (function () {
   window.addEvent('domready', init);
   window.addEvent('resize', resize);
 
-  return { rm: markdownifyHR, twitter: displayTwitterStatuses };
+  return { rm: markdownifyHR, twitter: displayTwitterStatuses, lastfm: displayLastfmTracks };
 })();

@@ -8,7 +8,8 @@
     <link type="application/rss+xml"  rel="alternate" title="Blog Posts" href="http://twurst.com/feed/rss.xml"/>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <script type="text/javascript" src="/static/mootools-1.2.4-core.js"></script>
+    <script type="text/javascript" src="http://google-analytics.com/ga.js"></script>
+    <script type="text/javascript" src="/static/mootools-core-1.3.2.js"></script>
     <script type="text/javascript" src="/static/site.js"></script>
   </head>
   <body>
@@ -20,22 +21,18 @@
 </pre>
 </a>
 <hr/>
+<noscript>
+  <p><br/>This page would look so much better if you had JavaScript turned on<br/><br/></p>
+</noscript>
+<p
 <div id="content">
   {{ content }}
 </div>
     </div>
     <script type="text/javascript">
-     <![CDATA[
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-      document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-      ]]>
-    </script>
-    <script type="text/javascript">
-     <![CDATA[
       var pageTracker = _gat._getTracker("UA-8014096-1");
       pageTracker._initData();
       pageTracker._trackPageview();
-      ]]>
     </script>
   </body>
 </html>
