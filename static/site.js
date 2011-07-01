@@ -30,12 +30,12 @@ Website = (function () {
 
     // put * in front of li tags
     $$('ul').each(function (e) {
-      var t = new Element('table', {styles: {padding: '0'}});
+      var t = new Element('table');
       var items = e.children;
       for (var i = 0; i < items.length; i++) {
-        new Element('tr', {styles: {padding: '0'}}).adopt([
-          new Element('td', {html: liChar, styles: {padding: '0'}}),
-          new Element('td', {html: items.item(i).get('html'), styles: {padding: '0'}})
+        new Element('tr').adopt([
+          new Element('td', {html: liChar}),
+          new Element('td', {html: items.item(i).get('html')})
         ]).inject(t);
       }
       t.replaces(e);
@@ -69,7 +69,7 @@ Website = (function () {
   }
 
   function displayTwitterStatuses(data) {
-    var headline = new Element('h1', {text: 'Recent Twitter Statuses'});
+    var headline = new Element('h1', {id: 'twitter-headline', text: 'Recent Twitter Statuses'});
     var list = new Element('table').adopt(
       data.map(function (status) {
         return new Element('tr').adopt([
@@ -79,21 +79,23 @@ Website = (function () {
       })
     );
     document.id('twitter').empty().adopt([headline, list]);
+    markdownifyH1($('twitter-headline'));
   }
 
   function displayLastfmTracks(data) {
     if (data.recenttracks != undefined) {
-      var headline = new Element('h1', {text: 'Recent Last.fm Tracks'});
+      var headline = new Element('h1', {id: 'lastfm-headline', text: 'Recent Last.fm Tracks'});
       var list = new Element('table');
-      var tracks = data.recenttracks.track.forEach(function (t) {
+      data.recenttracks.track.forEach(function (t) {
         new Element('tr').adopt([
           new Element('td', {html: liChar}),
           new Element('td', {html: t.artist['#text']}),
-          new Element('td', {html: '&nbsp;--&nbsp;'}),
+          new Element('td', {html: '&nbsp;&mdash;&nbsp;'}),
           new Element('td').grab(new Element('a', {href: t.url, html: t.name}))
         ]).inject(list);
       });
       document.id('lastfm').empty().adopt([headline, list]);
+      markdownifyH1($('lastfm-headline'));
     }
   }
 
@@ -114,7 +116,7 @@ Website = (function () {
   }
 
   function init() {
-    var ruleText = new Element('span', {id: 'dashwidthHack', html: '-', styles: {position: 'absolute', left: '-3000px'}});
+    var ruleText = new Element('span', {id: 'dashwidthHack', text: '-', styles: {position: 'absolute', left: '-3000px'}});
     $$('body').adopt(ruleText);
     dashWidth = ruleText.getWidth();
 
