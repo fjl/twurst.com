@@ -21,13 +21,13 @@ Also available as [atom](/feed/atom.xml)/[rss](/feed/rss.xml) feed.
 
 Me, Elsewhere
 =============
-- [XING](https://www.xing.com/profile/Felix_Lange11), anyone?
-- My [Stack Overflow account](http://stackoverflow.com/users/252612/felix-lange)
-- I slash the web with [blekko](http://blekko.com/user/fjl)
-- I'm [@fmakunbound](http://twitter.com/fmakunbound) on Twitter
-- My [listening history](http://last.fm/user/polenkommutator) is on last.fm
-- I host some of my projects [on GitHub](http://github.com/fjl)
-- My [Google Profile](http://www.google.com/profiles/twursted) (not very interesting)
+- <a rel="me" href="https://www.xing.com/profile/Felix_Lange11">XING</a>, anyone?
+- My <a rel="me" href="http://stackoverflow.com/users/252612/felix-lange">Stack Overflow account</a>
+- I slash the web with <a rel="me" href="http://blekko.com/user/fjl">blekko</a>
+- I'm <a rel="me" href="http://twitter.com/fmakunbound">fmakunbound</a> on Twitter
+- My <a rel="me" href="http://last.fm/user/polenkommutator">listening history</a> is on last.fm
+- I host some of my projects <a rel="me" href="http://github.com/fjl">on GitHub</a>
+- My <a rel="me" href="http://www.google.com/profiles/twursted">Google Profile</a> (not very interesting)
 
 <div id="twitter">&nbsp;</div>
 <div id="lastfm">&nbsp;</div>
