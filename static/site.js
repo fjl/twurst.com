@@ -71,7 +71,7 @@ Website = (function () {
   function displayTwitterStatuses(data) {
     var headline = new Element('h1', {id: 'twitter-headline', text: 'Recent Twitter Statuses'});
     var list = new Element('table').adopt(
-      data.map(function (status) {
+      data.reverse().map(function (status) {
         return new Element('tr').adopt([
           new Element('td', {html: liChar}),
           new Element('td', {html: formatStatus(status.text)})
