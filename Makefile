@@ -1,2 +1,2 @@
 all:
-       jekyll ../htdocs
+	jekyll ../htdocs
