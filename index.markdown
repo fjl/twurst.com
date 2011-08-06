@@ -21,13 +21,15 @@ Also available as [atom](/feed/atom.xml)/[rss](/feed/rss.xml) feed.
 
 Me, Elsewhere
 =============
-- <a rel="me" href="https://www.xing.com/profile/Felix_Lange11">XING</a>, anyone?
-- My <a rel="me" href="http://stackoverflow.com/users/252612/felix-lange">Stack Overflow account</a>
-- I slash the web with <a rel="me" href="http://blekko.com/user/fjl">blekko</a>
-- I'm <a rel="me" href="http://twitter.com/fmakunbound">fmakunbound</a> on Twitter
-- My <a rel="me" href="http://last.fm/user/polenkommutator">listening history</a> is on last.fm
-- I host some of my projects <a rel="me" href="http://github.com/fjl">on GitHub</a>
-- My <a rel="me" href="http://www.google.com/profiles/twursted">Google Profile</a> (not very interesting)
+<ul>
+  <li><a rel="me" href="https://www.xing.com/profile/Felix_Lange11">XING</a>, anyone?</li>
+  <li>My <a href='http://stackoverflow.com/users/252612/felix-lange' rel='me'>Stack Overflow account</a></li>
+  <li>I slash the web with <a href='http://blekko.com/user/fjl' rel='me'>blekko</a></li>
+  <li>I&#8217;m <a href='http://twitter.com/fmakunbound' rel='me'>fmakunbound</a> on Twitter</li>
+  <li>My <a href='http://last.fm/user/polenkommutator' rel='me'>listening history</a> is on last.fm</li>
+  <li>I host some of my projects <a href='http://github.com/fjl' rel='me'>on GitHub</a></li>
+  <li>My <a href='http://www.google.com/profiles/twursted' rel='me'>Google Profile</a> (not very interesting)</li>
+</ul>
 
 <div id="twitter">&nbsp;</div>
 <div id="lastfm">&nbsp;</div>
