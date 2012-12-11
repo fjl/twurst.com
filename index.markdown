@@ -1,13 +1,18 @@
 ---
 layout: root
 ---
-This is the personal homepage of Felix Lange.  I like building software (using [Erlang](http://erlang.org),
-[Ruby](http://ruby-lang.org) and [Racket](http://racket-lang.org)) as well as creating music with my friends.
-I study computer science at the University of [Magdeburg, Germany][maps].
-For matters most urgent, you may send electronic mail to
+This is the personal homepage of Felix Lange.
+I like building software (using [Common Lisp][hyperspec], [Erlang][erlang], [Racket][racket]),
+cooking and music. 
+I live in Berlin, Germany. In case you want to contact me, send electronic mail to
 <span class="mail">fjl [at] twurst [dot] com</span>.
 
-[maps]: http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;q=Magdeburg,+Saxony-Anhalt,+Germany&amp;sll=37.09024,-95.712891&amp;sspn=32.197599,56.337891&amp;ie=UTF8&amp;cd=1&amp;geocode=FYx0GwMd3Y-xAA&amp;split=0&amp;hq=&amp;hnear=Magdeburg,+Saxony-Anhalt,+Germany&amp;ll=52.177721,11.636581&amp;spn=12.463064,28.168945&amp;t=h&amp;z=5
+I currently work for *Veodin Software* building [KeyRocket](http://keyrocket.com/),
+a smart keyboard shortcut trainer for Microsoft Windows™.
+
+[hyperspec]: http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/FrontMatter/index.html "Common Lisp Hyperspec"
+[erlang]: http://erlang.org "Erlang Homepage"
+[racket]: http://racket-lang.org "Racket Homepage"
 
 Blog Posts
 ==========
@@ -25,9 +30,9 @@ Me, Elsewhere
   <li><a rel="me" href="https://www.xing.com/profile/Felix_Lange11">XING</a>, anyone?</li>
   <li>My <a href='http://stackoverflow.com/users/252612/felix-lange' rel='me'>Stack Overflow account</a></li>
   <li>I slash the web with <a href='http://blekko.com/user/fjl' rel='me'>blekko</a></li>
-  <li>I&#8217;m <a href='http://twitter.com/fmakunbound' rel='me'>fmakunbound</a> on Twitter</li>
+  <li>I&#8217;m <a href='http://twitter.com/fmakunbound' rel='me'>@fmakunbound</a> on Twitter</li>
   <li>My <a href='http://last.fm/user/polenkommutator' rel='me'>listening history</a> is on last.fm</li>
-  <li>I host some of my projects <a href='http://github.com/fjl' rel='me'>on GitHub</a></li>
+  <li>I host some of my software projects <a href='http://github.com/fjl' rel='me'>on GitHub</a></li>
   <li>My <a href='http://www.google.com/profiles/twursted' rel='me'>Google Profile</a> (not very interesting)</li>
 </ul>
 

@@ -2,7 +2,7 @@ body {
  /* background-color: #0D041C; */
   background-color: #0a0f0a;
   color: #ccc;
-  font-family: "Dejavu Sans Mono", "Menlo", "Bitstream Vera Sans Mono", 
+  font-family: "Dejavu Sans Mono", "Menlo", "Bitstream Vera Sans Mono",
                "Panic Sans", "Droid Sans Mono", monospace;
   font-size: 11pt;
   line-height: 1.4em;
@@ -37,7 +37,7 @@ h1 {
 }
 
 p {
-  margin: 0.3em 0 0 0;
+  margin: 0.8em 0 0 0;
 }
 
 hr {
