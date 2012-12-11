@@ -31,9 +31,6 @@ Me, Elsewhere
   <li>My <a href='http://www.google.com/profiles/twursted' rel='me'>Google Profile</a> (not very interesting)</li>
 </ul>
 
-<div id="twitter">&nbsp;</div>
 <div id="lastfm">&nbsp;</div>
 <script type="text/javascript" src="http://ws.audioscrobbler.com/2.0/?method=user.recentTracks&amp;user=polenkommutator&amp;limit=10&amp;api_key=ca736a9da66216e778c1a909f827fd44&amp;format=json&amp;callback=Website.lastfm">
-</script>
-<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/fmakunbound.json?count=10&amp;callback=Website.twitter">
 </script>

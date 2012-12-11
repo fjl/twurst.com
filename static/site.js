@@ -44,44 +44,6 @@ Website = (function () {
     markdownifyHR();
   }
 
-  // splits off sentence end character if present
-  function wpart(str) {
-    res = /(.*?)([.:?!])$/.exec(str)
-    if (res != null)
-      return [res[1], res[2]];
-    else
-      return [str, ""];
-  }
-
-  function formatStatus(str) {
-    return str.split(' ').map(function (word) {
-      w = wpart(word);
-      if (word.test(/^http:\/\/.*/)) {
-        return '<a href="' + word + '">' + word + '</a>';
-      } else if (word.test(/^@.*/)) {
-        return '<a href="http://twitter.com/' + w[0].substr(1) + '">' + word + '</a>' + w[1];
-      } else if (word.test(/^#.*/)) {
-        return '<a href="http://search.twitter.com/search?q=%23' + w[0].substr(1) + '">' + w[0] + '</a>' + w[1];
-      } else {
-        return word;
-      }
-    }).join(' ');
-  }
-
-  function displayTwitterStatuses(data) {
-    var headline = new Element('h1', {id: 'twitter-headline', text: 'Recent Twitter Statuses'});
-    var list = new Element('table').adopt(
-      data.reverse().map(function (status) {
-        return new Element('tr').adopt([
-          new Element('td', {html: liChar}),
-          new Element('td', {html: formatStatus(status.text)})
-        ]);
-      })
-    );
-    document.id('twitter').empty().adopt([headline, list]);
-    markdownifyH1($('twitter-headline'));
-  }
-
   function displayLastfmTracks(data) {
     if (data.recenttracks != undefined) {
       var headline = new Element('h1', {id: 'lastfm-headline', text: 'Recent Last.fm Tracks'});
@@ -138,5 +100,5 @@ Website = (function () {
   window.addEvent('domready', init);
   window.addEvent('resize', resize);
 
-  return { rm: markdownifyHR, twitter: displayTwitterStatuses, lastfm: displayLastfmTracks };
+  return { rm: markdownifyHR, lastfm: displayLastfmTracks };
 })();
