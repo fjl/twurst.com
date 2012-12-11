@@ -14,16 +14,6 @@ a smart keyboard shortcut trainer for Microsoft Windows™.
 [erlang]: http://erlang.org "Erlang Homepage"
 [racket]: http://racket-lang.org "Racket Homepage"
 
-Blog Posts
-==========
-Also available as [atom](/feed/atom.xml)/[rss](/feed/rss.xml) feed.
-
-<ul>
-{% for p in site.posts %}
-<li><span class="pdate">{{p.date | date: "%Y-%m-%d"}} &raquo;</span> <a href="{{ p.url }}">{{ p.title }}</a></li>
-{% endfor %}
-</ul>
-
 Me, Elsewhere
 =============
 <ul>
