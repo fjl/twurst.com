@@ -1,6 +1,3 @@
----
-layout: root
----
 This is the personal homepage of Felix Lange.
 I like building software (using [Common Lisp][hyperspec], [Erlang][erlang], [Racket][racket]),
 cooking and music. 
