@@ -4,12 +4,12 @@ cooking and music.
 I live in Berlin, Germany. In case you want to contact me, send electronic mail to
 <span class="mail">fjl [at] twurst [dot] com</span>.
 
-I currently work for *Veodin Software* building [KeyRocket](http://keyrocket.com/),
-a smart keyboard shortcut trainer for Microsoft Windows&trade;.
+*Currently looking for work. If you need a helping hand, [check my résumé][resume].*
 
 [hyperspec]: http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/FrontMatter/index.html "Common Lisp Hyperspec"
 [erlang]: http://erlang.org "Erlang Homepage"
 [racket]: http://racket-lang.org "Racket Homepage"
+[resume]: http://careers.stackoverflow.com/felix-lange
 
 Me, Elsewhere
 =============
