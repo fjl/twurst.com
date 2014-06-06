@@ -1,14 +1,14 @@
 This is the personal homepage of Felix Lange.
-I like building software (using [Common Lisp][hyperspec], [Erlang][erlang], [Racket][racket]),
+I like building software (using [Common Lisp][hyperspec], [Erlang][erlang], [Go][go]),
 cooking and music. 
 I live in Berlin, Germany. In case you want to contact me, send electronic mail to
-<span class="mail">fjl [at] twurst [dot] com</span>.
+<span class="mail">br [at] twurst [dot] com</span>.
 
-*Currently looking for work. If you need a helping hand, [check my r&egrave;sum&egrave;][resume].*
+*Currently looking for work. If you need a helping hand, [check my résumé][resume].*
 
 [hyperspec]: http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/FrontMatter/index.html "Common Lisp Hyperspec"
 [erlang]: http://erlang.org "Erlang Homepage"
-[racket]: http://racket-lang.org "Racket Homepage"
+[go]: http://golang.org "Go Homepage"
 [resume]: http://careers.stackoverflow.com/felix-lange
 
 Me, Elsewhere
