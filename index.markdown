@@ -4,7 +4,7 @@ cooking and music.
 I live in Berlin, Germany. In case you want to contact me, send electronic mail to
 <span class="mail">br [at] twurst [dot] com</span>.
 
-*Currently looking for work. If you need a helping hand, [check my résumé][resume].*
+*I'm currently looking for work. If you need a helping hand, [check my résumé][resume].*
 
 [hyperspec]: http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/FrontMatter/index.html "Common Lisp Hyperspec"
 [erlang]: http://erlang.org "Erlang Homepage"
@@ -14,13 +14,9 @@ I live in Berlin, Germany. In case you want to contact me, send electronic mail 
 Me, Elsewhere
 =============
 <ul>
-  <li><a rel="me" href="https://www.xing.com/profile/Felix_Lange11">XING</a>, anyone?</li>
-  <li>My <a href='http://stackoverflow.com/users/252612/felix-lange' rel='me'>Stack Overflow account</a></li>
-  <li>I slash the web with <a href='http://blekko.com/user/fjl' rel='me'>blekko</a></li>
-  <li>I&#8217;m <a href='http://twitter.com/fmakunbound' rel='me'>@fmakunbound</a> on Twitter</li>
-  <li>My <a href='http://last.fm/user/polenkommutator' rel='me'>listening history</a> is on last.fm</li>
   <li>I host some of my software projects <a href='http://github.com/fjl' rel='me'>on GitHub</a></li>
-  <li>My <a href='http://www.google.com/profiles/twursted' rel='me'>Google Profile</a> (not very interesting)</li>
+  <li>My listening history is <a href='http://last.fm/user/polenkommutator' rel='me'>on last.fm</a></li>
+  <li>I&#8217;m <a href='http://twitter.com/fmakunbound' rel='me'>@fmakunbound</a> on Twitter</li>
 </ul>
 
 <div id="lastfm">&nbsp;</div>
