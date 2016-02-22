@@ -1,7 +1,8 @@
 body {
  /* background-color: #0D041C; */
   background-color: #0a0f0a;
-  color: #ccc;
+  background: url(always_grey.png);
+  color: #ddd;
   font-family: "Dejavu Sans Mono", "Menlo", "Bitstream Vera Sans Mono",
                "Panic Sans", "Droid Sans Mono", monospace;
   font-size: 11pt;
@@ -19,6 +20,7 @@ td {
 #frame {
   min-width: 60ex;
   max-width: 110ex;
+  margin: 3ex 3.1ex;
 }
 
 a:link, a:hover, a:active, a:visited {
@@ -60,31 +62,10 @@ pre {
   font: inherit;
 }
 
-#content {
-  margin: 1ex 1.1ex;
-}
-
-#logo, code {
+code {
   font: inherit;
   color: #cceeaa;
   margin-left: 0;
-}
-
-#logo {
-  line-height: 1.3em;
-}
-
-#logo:hover {
-  color: #ffffff;
-}
-
-#logolink:link,
-#logolink:hover,
-#logolink:active,
-#logolink:visited {
-  font: inherit;
-  color: inherit;
-  text-decoration: none;
 }
 
 /* Posts */
