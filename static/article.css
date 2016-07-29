@@ -165,8 +165,17 @@ td,th {
     vertical-align: middle;
 }
 
+.org-ul {
+    padding-left: 40px;
+}
+
 .org-ul li {
     margin: 0.8pt 0;
+}
+
+.org-ul li.on, .org-ul li.off {
+    list-style-type: none;
+    margin-left: -20px;
 }
 
 code {
