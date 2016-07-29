@@ -72,11 +72,11 @@ You can subscribe for notifications whenever the canonical head block is updated
 
 ** Reading Contract Data
 
-The preferred way to read from the blockchain is through contract calls, which are
-directly executed by the EVM but not mined into the blockchain. ~ContractCall~ is a low-
-level method to execute such calls. For applications which are structure around specific
-contracts, [[https://github.com/ethereum/go-ethereum/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts][the go-ethereum abigen tool]] provides a nicer, properly typed way to perform
-calls.
+The preferred way to read from the blockchain is through contract calls, essentially
+transactions that are executed by the EVM but not mined into the blockchain.
+~ContractCall~ is a low-level method to execute such calls. For applications which are
+structured around specific contracts, [[https://github.com/ethereum/go-ethereum/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts][the go-ethereum abigen tool]] provides a nicer,
+properly typed way to perform calls.
 
 #+BEGIN_SRC go
   type CallMsg struct {
