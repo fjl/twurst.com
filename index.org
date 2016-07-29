@@ -1,6 +1,8 @@
 #+STARTUP: showeverything
 
-* ⥁ Hi, I'm Felix
+░░░░░░░░░░░░░░░░░░░░░░░░░░
+
+* Hi, I'm Felix
 
 I like building software (using Common Lisp, Erlang, Go) and enjoy music. I write code for
 [[https://github.com/ethereum/go-ethereum][go-ethereum]]. In case you want to contact me,

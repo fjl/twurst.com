@@ -8,7 +8,7 @@
 (defun make-twurst-article-preamble (plist)
   (let ((filename (file-name-nondirectory (plist-get plist :input-file)))
         (date     (org-export-get-date plist "%Y-%m-%d")))
-    (format "<div id=\"article-header\"><a href=\"../index.html\">⥁ twurst.com</a> / %s (%s)</div>"
+    (format "<div id=\"article-header\"><a href=\"../index.html\">░░ twurst.com</a> / %s (%s)</div>"
             filename date)))
 
 (setq twurst-projects
@@ -54,7 +54,7 @@
         ("twurst-assets"
          :base-directory ,twurst-project-dir
          :publishing-directory ,twurst-output-dir
-         :base-extension "png\\|svg"
+         :base-extension "png\\|svg\\|ico"
          :publishing-function org-publish-attachment)
         
         ("twurst-style-assets"
