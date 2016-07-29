@@ -271,7 +271,7 @@ Due to issue [[https://github.com/ethereum/go-ethereum/issues/2508][#2508]], ~ty
 ~MixDigest~. This makes it impossible to derive the correct block hash. I'll solve this by
 adding the field to the RPC response and checking for it in ethclient.
   
-* Development Roadmap (Updated {{{modification-time(%Y-%m-%d)}}})
+* Development Roadmap
 
 My ambitious target for landing the new API is the geth 1.5 release.
 The work required can be included step-by-step (list roughly in dependency order):
@@ -286,6 +286,8 @@ The work required can be included step-by-step (list roughly in dependency order
 - [ ] Add API methods to ~eth.Ethereum~
    - This will require some reorganising to move code from internal/ethapi into 'eth'.
    - The native contract backend can be removed when done.
+
+/Updated: {{{modification-time(%Y-%m-%d)}}}/
 
 * Aside: Import Hygiene And Vendoring Issues
 
