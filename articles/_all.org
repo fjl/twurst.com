@@ -1,3 +1,0 @@
-#+TITLE: All Articles
-
-   + [[file:geth-1.5-api.org][A Stable Go Ethereum API (2016-07-27)]]
