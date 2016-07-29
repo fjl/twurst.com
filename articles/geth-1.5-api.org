@@ -60,13 +60,13 @@ many cases, calling a contract can be preferable to reading its storage directly
       CodeAt(ctx context.Context, account common.Address, blockNumber *big.Int) ([]byte, error)
       NonceAt(ctx context.Context, account common.Address, blockNumber *big.Int) (uint64, error)
   }
-#+END_SRC go
+#+END_SRC
 
 You can subscribe for notifications whenever the canonical head block is updated.
 
 #+BEGIN_SRC go
   type ChainHeadEventer interface {
-      SubscribeNewHeaders(ctx context.Context, ch chan<- *types.Header) (*types.Header, error)
+      SubscribeNewHeaders(ctx context.Context, ch chan<- *types.Header) (event.Subscription, error)
   }
 #+END_SRC
 
@@ -94,7 +94,7 @@ properly typed way to perform calls.
 #+END_SRC
 
 Just like in web3.js, contract-generated log events can be accessed using a one-off query
-or continuously using an [[https://github.com/ethereum/go-ethereum/issues/1867#issuecomment-233182850][event subscription]]. Polling filters are not part of the
+or continuously using an event subscription. Polling filters are not part of the
 interface, but implementations of the interface can use them under the hood to provide the
 subscription.
 
@@ -153,6 +153,7 @@ for a specific account.
       PendingStorageAt(ctx context.Context, account common.Address, key common.Hash) ([]byte, error)
       PendingCodeAt(ctx context.Context, account common.Address) ([]byte, error)
       PendingNonceAt(ctx context.Context, account common.Address) (uint64, error)
+      PendingTransactionCount(ctx context.Context) (uint, error)
   }
 
   type PendingContractCaller interface {
@@ -199,7 +200,7 @@ them. If a certain method is implemented by, say, ~eth.Ethereum~ but not
 ~les.LightEthereum~, user packages which need those methods can simply not be used with
 the light client.
 
-** eth.Ethereum
+** In-process Full Node: eth.Ethereum
 
 The ~Ethereum~ object implements an Ethereum full node. It sets up the eth protocol and
 go-ethereum core. Even though this type has been around for a long time, it's purpose
@@ -242,14 +243,14 @@ Usage Example:
   log.Println("latest block:", latestBlock.Number())
 #+END_SRC
 
-** les.LightEthereum
+** In-process Light Client: les.LightEthereum
 
 ~LightEthereum~ mirrors the ~Ethereum~ object and is the entry point for the light client.
 The context parameter cancels les protocol requests. Since the light client does not keep
 a pending state, methods accessing the pending state will be unavailable. Retrieving
 non-local transactions by hash is not supported either.
 
-** ethclient.Client
+** Remote Node: ethclient.Client
 
 package ethclient is a lightweight wrapper around the web3 RPC API. The method set offered
 by ~ethclient.Client~ is the complete API as described above. The context parameter is used
