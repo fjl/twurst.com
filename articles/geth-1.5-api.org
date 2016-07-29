@@ -1,0 +1,348 @@
+#+TITLE: A Stable Go Ethereum API
+#+AUTHOR: Felix Lange <fjl@ethereum.org>
+#+DATE: <2016-07-27 Wed>
+#+OPTIONS: num:nil ':t
+#+STARTUP: showall
+
+This document lays down my vision for a stable Go API for the Ethereum blockchain. While
+go-ethereum is highly modular and has offered documented APIs for a long time, we have not
+paid much attention to keeping those Go APIs stable. The introduction of the light client
+presents another challenge: how can Go libraries and applications interact with Ethereum
+irrespective of the protocol that is used to fetch and send the data?
+
+The 1.4 release did a first stab at an app developer focused API for contracts. The
+accounts/abi/bind package works on top of an abstract backend with multiple supported
+implementations: the RPC client, an in-process full node and our unit test blockchain
+generator.
+
+For the 1.5 release, I would like to expand the Go API to include blockchain access and
+real time events. My vision is a transport-agnostic, stable API that we can support for
+several releases.
+
+* The Ethereum Method Set
+
+In Go, an interface type defines a /method set/ containing abstract operations. The
+interfaces presented below capture almost all primitive operations that go-ethereum can
+perform. Consumers of the Go API are expected to define their own subset of these
+operations or commit to a concrete implementation of the API (e.g. ~eth.Ethereum~).
+
+Let's have a tour of the available operations.
+
+** Accessing The Blockchain
+
+First up, access to the blockchain. The methods in this interface access raw data from
+either the canonical-chain (when requesting by block number) or any blockchain fork that
+was previously downloaded and processed by the node. The block number argument can be
+~nil~ to select the latest canonical block. Reading block headers should be preferred over
+full blocks whenever possible.
+
+#+BEGIN_SRC go
+  type ChainReader interface {
+      BlockByHash(ctx context.Context, hash common.Hash) (*types.Block, error)
+      BlockByNumber(ctx context.Context, number *big.Int) (*types.Block, error)
+      HeaderByHash(ctx context.Context, hash common.Hash) (*types.Header, error)
+      HeaderByNumber(ctx context.Context, number *big.Int) (*types.Header, error)
+      TransactionInBlock(ctx context.Context, blockHash common.Hash, index uint) (*types.Transaction, error)
+      TransactionByHash(ctx context.Context, hash common.Hash) (*types.Transaction, error)
+      ReceiptByHash(ctx context.Context, txHash common.Hash) (*types.Receipt, error)
+      ReceiptInBlock(ctx context.Context, blockHash common.Hash, index uint) (*types.Receipt, error)
+  }
+#+END_SRC
+
+Ethereum state in the canonical blockchain can be accessed as well. Note that
+implementations of the interface may be unable to return state values for old blocks. In
+many cases, calling a contract can be preferable to reading its storage directly.
+
+#+BEGIN_SRC go
+  type ChainStateReader interface {
+      BalanceAt(ctx context.Context, account common.Address, blockNumber *big.Int) (*big.Int, error)
+      StorageAt(ctx context.Context, account common.Address, offset int, blockNumber *big.Int) ([]byte, error)
+      CodeAt(ctx context.Context, account common.Address, blockNumber *big.Int) ([]byte, error)
+      NonceAt(ctx context.Context, account common.Address, blockNumber *big.Int) (uint64, error)
+  }
+#+END_SRC go
+
+You can subscribe for notifications whenever the canonical head block is updated.
+
+#+BEGIN_SRC go
+  type ChainHeadEventer interface {
+      SubscribeNewHeaders(ctx context.Context, ch chan<- *types.Header) (*types.Header, error)
+  }
+#+END_SRC
+
+** Reading Contract Data
+
+The preferred way to read from the blockchain is through contract calls, which are
+directly executed by the EVM but not mined into the blockchain. ~ContractCall~ is a low-
+level method to execute such calls. For applications which are structure around specific
+contracts, [[https://github.com/ethereum/go-ethereum/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts][the go-ethereum abigen tool]] provides a nicer, properly typed way to perform
+calls.
+
+#+BEGIN_SRC go
+  type CallMsg struct {
+      From     common.Address // the sender of the 'transaction'
+      To       common.Address // the destination contract
+      Gas      *big.Int       // if nil, the call executes with near-infinite gas
+      GasPrice *big.Int       // wei <-> gas exchange ratio
+      Value    *big.Int       // amount of wei sent along with the call
+      Data     []byte         // input data, usually an ABI-encoded contract method invocation
+  }
+
+  type ContractCaller interface {
+      CallContract(ctx context.Context, call CallMsg, blockNumber *big.Int) ([]byte, error)
+  }
+#+END_SRC
+
+Just like in web3.js, contract-generated log events can be accessed using a one-off query
+or continuously using an [[https://github.com/ethereum/go-ethereum/issues/1867#issuecomment-233182850][event subscription]]. Polling filters are not part of the
+interface, but implementations of the interface can use them under the hood to provide the
+subscription.
+
+#+BEGIN_SRC go
+  type FilterQuery struct {
+      FromBlock *big.Int         // beginning of the queried range, nil means genesis block
+      ToBlock   *big.Int         // end of the range, nil means latest block
+      Addresses []common.Address // restricts match to events created by specific contracts
+      Topics    [][]common.Hash  // restricts match to particular event topics
+  }
+
+  type LogFilterer interface {
+      FilterLogs(ctx context.Context, q FilterQuery) ([]vm.Log, error)
+      SubscribeFilterLogs(ctx context.Context, q FilterQuery, ch chan<- vm.Log) (event.Subscription, error)
+  }
+#+END_SRC
+
+** Sending Transactions
+
+The only way to change on-chain data is by sending a signed transaction. In contrast to
+the web3.js, the Go API does not support remote accounts or automatic nonce assignment.
+Consumers of the API can use [[http://godoc.org/github.com/ethereum/go-ethereum/accounts][package accounts]] to maintain local private keys and need to
+assign the nonce using ~PendingNonceAt~.
+
+~SendTransaction~ injects a signed transaction into the pending pool for execution. If the
+transaction was a contract creation, the ~TransactionReceipt~ method can be used to
+retrieve the contract address after the transaction has been mined.
+
+#+BEGIN_SRC go
+  type TransactionSender interface {
+      SendTransaction(ctx context.Context, tx *types.Transaction) error
+  }
+#+END_SRC
+
+The time until a sent transaction is included in the blockchain depends on the gas price.
+go-ethereum provides a built-in oracle that monitors the blockchain to determine an
+optimal gas price. The ~GasPricer~ interface wraps this functionality.
+
+#+BEGIN_SRC go
+  type GasPricer interface {
+      SuggestGasPrice(ctx context.Context) (*big.Int, error)
+  }
+#+END_SRC
+
+** The Pending State
+
+The pending state is the result of all known executable transactions which have not yet
+been included in the blockchain. It is commonly used to display the result of
+'unconfirmed' actions (e.g. wallet value transfers) initiated by the user. The
+~PendingNonceAt~ operation is a good way to retrieve the next available transaction nonce
+for a specific account.
+
+#+BEGIN_SRC go
+  type PendingStateReader interface {
+      PendingBalanceAt(ctx context.Context, account common.Address) (uint64, error)
+      PendingStorageAt(ctx context.Context, account common.Address, key common.Hash) ([]byte, error)
+      PendingCodeAt(ctx context.Context, account common.Address) ([]byte, error)
+      PendingNonceAt(ctx context.Context, account common.Address) (uint64, error)
+  }
+
+  type PendingContractCaller interface {
+      PendingCallContract(ctx context.Context, call CallMsg) ([]byte, error)
+  }
+#+END_SRC
+
+~EstimateGas~ tries to estimate the gas needed to execute a specific transaction based on
+the current pending state of the backend blockchain. There is no guarantee that this is
+the true gas limit requirement as other transactions may be added or removed by miners,
+but it should provide a basis for setting a reasonable default.
+
+#+BEGIN_SRC go
+  type GasEstimator interface {
+      EstimateGas(ctx context.Context, call CallMsg) (usedGas *big.Int, err error)
+  }
+#+END_SRC
+
+Nodes continuously update the pending state with transactions received from the network or
+through the API. If information from the pending state is cached or displayed on the
+screen, it can be useful to subscribe to changes.
+
+#+BEGIN_SRC go
+  type PendingStateEventer interface {
+      SubscribePendingTransactions(ctx context.Context, ch chan<- *types.Transaction) (event.Subscription, error)
+  }
+#+END_SRC
+
+** TODO Open Questions
+
+- Should ~EstimateGas~ really exist in the API? Estimating gas basically runs the
+  transaction as a contract call with lots of gas available and returns how much of it was
+  used. We've discussed this before though and decided in favour of keeping it. If
+  ~CallContract~ is powerful enough (i.e. returns both gas and result data), ~EstimateGas~
+  can be implemented as a function in accounts/abi/bind.
+
+* Three Implementations Of The Method Set
+
+Note that this section talks about code which is not written or merged yet.
+
+go-ethereum provides three independent implementations of the API method set.
+Implementations may omit certain methods as there is no defined interface capturing all of
+them. If a certain method is implemented by, say, ~eth.Ethereum~ but not
+~les.LightEthereum~, user packages which need those methods can simply not be used with
+the light client.
+
+** eth.Ethereum
+
+The ~Ethereum~ object implements an Ethereum full node. It sets up the eth protocol and
+go-ethereum core. Even though this type has been around for a long time, it's purpose
+beyond holding references to these pieces has been somewhat unclear. Long-term, certain
+components (e.g. urlhint HTTP client, PoW miner) which are instantiated by ~eth.Ethereum~
+can be moved out and instantiated on top of the API.
+
+In the ~eth.Ethereum~ implementation of the API, the context parameter can be ignored
+because the underlying database operations are fast and cannot be canceled.
+
+Usage Example:
+
+#+BEGIN_SRC go
+  // Configure the node and an ethereum full node.
+  stackConf := &node.Config{DataDir: datadir, ...}
+  ethConf := &eth.Config{FastSync: true, ...}
+  stack, err := node.New(stackConf)
+  if err != nil {
+      return nil, fmt.Errorf("protocol stack: %v", err)
+  }
+
+  // Start the node. This is a bit ugly at the moment. 
+  newEth := func(ctx *node.ServiceContext) (node.Service, error) {
+      return eth.New(ctx, ethConf)
+  }
+  if err := stack.Register(newEth); err != nil {
+      log.Fatal("can't register eth:", err)
+  }
+  if err := stack.Start(); err != nil {
+      log.Fatal("can't start node:", err)
+  }
+  var eth *eth.Ethereum
+  node.Service(eth)
+
+  // Use Ethereum.
+  latestBlock, err := eth.BlockByNumber(context.Background(), nil)
+  if err != nil {
+      log.Fatal("oops:", err)
+  }
+  log.Println("latest block:", latestBlock.Number())
+#+END_SRC
+
+** les.LightEthereum
+
+~LightEthereum~ mirrors the ~Ethereum~ object and is the entry point for the light client.
+The context parameter cancels les protocol requests. Since the light client does not keep
+a pending state, methods accessing the pending state will be unavailable. Retrieving
+non-local transactions by hash is not supported either.
+
+** ethclient.Client
+
+package ethclient is a lightweight wrapper around the web3 RPC API. The method set offered
+by ~ethclient.Client~ is the complete API as described above. The context parameter is used
+to control deadline and cancelation of RPC calls.
+
+Usage Example:
+
+#+BEGIN_SRC go
+  c, _ := ethclient.Dial("ws://127.0.0.1:8585")
+  ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+  latestBlock, err := c.BlockByNumber(ctx, nil)
+  if err != nil {
+      log.Fatal("oops:", err)
+  }
+  log.Println("latest block:", latestBlock.Number())
+#+END_SRC
+
+Due to issue [[https://github.com/ethereum/go-ethereum/issues/2508][#2508]], ~types.Header~ values returned by ethclient may be missing the
+~MixDigest~. This makes it impossible to derive the correct block hash. I'll solve this by
+adding the field to the RPC response and checking for it in ethclient.
+  
+* Development Roadmap
+
+My ambitious target for landing the new API is the geth 1.5 release.
+The work required can be included step-by-step (list roughly in dependency order):
+
+- [X] RPC client that can handle subscriptions
+- [ ] ethclient.Client needs to be written (WIP)
+- [ ] 'simulated' contract backend needs a place and BalanceAt, CodeAt methods
+- [ ] accounts/abi/bind/backends can be removed
+- [ ] eth/filters needs support for channel subscriptions (Bas WIP)
+- [ ] API methods for eth.Ethereum
+   - This will require some reorganising to move code from internal/ethapi into 'eth'.
+   - The native contract backend can be removed when done.
+- [ ] build/ci.go changes for vendoring (see below) need to happen if/when we switch to
+  using a 'vendor' directory instead of Godeps.
+
+We will do a viability test of ethclient in the SWARM codebase because the code is already
+structured using a caller-defined interface with very similar methods.
+
+* Aside: Import Hygiene And Vendoring Issues
+
+Argument and result types used in the API method set force consumers to link the packages
+in which those types are defined. In order to minimize the amount of go-ethereum code that
+consumers must link, use of imported types in the API is limited to a blessed set of
+'leaf' packages.
+
+Built-in types and types from the standard library (e.g. ~big.Int~, ~ecdsa.PublicKey~) are
+always acceptable. go-ethereum leaf packages and types used are listed below. The listed
+packages were chosen because they have few dependencies and enjoy widespread use in the
+go-ethereum code base.
+
+- ~golang.org/x/net/context~ (~Context~)
+- ~github.com/ethereum/go-ethereum/common~ (~Hash~, ~Address~)
+- ~github.com/ethereum/go-ethereum/core/types~ (~Block~, ~Header~, ~Transaction~, ~Receipt~)
+- ~github.com/ethereum/go-ethereum/event~ (~Subscription~)
+- ~github.com/ethereum/go-ethereum/core/vm~ (~Log~)[fn:1]
+
+Vendored dependencies places more restrictions on the argument and result types. Since
+go-ethereum contains both commands and library code, it is affected by the [[https://groups.google.com/forum/#!topic/golang-dev/4FfTBfN2YaI][vendoring edge
+case]]. Almost all API methods reference the ~Context~ type, import from
+~golang.org/x/net/context~. In Go 1.7, package context has moved to the standard library
+but it'll take a while before go-ethereum can import it from there.
+
+Until then, the solution for this issue will be to vendor certain packages in a separate
+tree under build/. The ci.go build script can add the additional vendor tree to GOPATH
+during compilation, ensuring a deterministic build. Go projects importing our API can
+import/vendor their own version of the respective dependencies. This works for packages
+which have a reasonably stable interface (i.e. it works for context).
+
+Here's what the resulting directory tree will look like:
+
+#+BEGIN_EXAMPLE
+go-ethereum/
+    accounts
+    build/
+        vendor/
+           golang.org/x/net/context/
+           ...dependencies exposed by the go-ethereum library API...
+    cmd/
+        geth/
+        evm/
+        ...
+    common/
+    console/
+    internal/
+    ...
+    vendor/
+        golang.org/x/crypto/scrypt/
+        ...other dependencies not exposed by the API...
+#+END_EXAMPLE
+
+* Footnotes
+
+[fn:1] We could avoid the dependency from ethclient on core/vm by moving the Log
+type to core/types.

@@ -1,0 +1,60 @@
+body {
+    background-color: #3b6043;
+    color: #ddd;
+    font: normal normal normal 16px/1.6em "Menlo", "Dejavu Sans Mono", "Bitstream Vera Sans Mono", "Panic Sans", "Droid Sans Mono", monospace;
+    margin: 0;
+    animation: bgtetrad 15s linear infinite alternate;
+    -webkit-animation: bgtetrad 15s linear infinite alternate;
+}
+
+@keyframes bgtetrad {
+    0%   { background-color: #3b6043; }
+    25%  { background-color: #3b5860; }
+    50%  { background-color: #603b58; }
+    75%  { background-color: #60433b; }
+}
+
+@-webkit-keyframes bgtetrad {
+    0%   { background-color: #3b6043; }
+    25%  { background-color: #3b5860; }
+    50%  { background-color: #603b58; }
+    75%  { background-color: #60433b; }
+}
+
+#content {
+    min-width: 30ex;
+    max-width: 90ex;
+    margin: 1em 2%;
+}
+
+a:link, a:hover, a:active, a:visited {
+    color: #FFFAFA;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+h1, h2, h3, h4, h5 {
+    color: white;
+    font-size: inherit;
+    font-weight: bold;
+    margin: 1em 0 0 0;
+}
+
+hr {
+    margin: 1ex 0 1ex 0;
+    border: 1px solid #999;
+}
+
+pre {
+    margin-left: 2em;
+    font: inherit;
+}
+
+code {
+    font: inherit;
+    color: #cceeaa;
+    margin-left: 0;
+}

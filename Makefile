@@ -1,24 +1,9 @@
-OUTDIR   = _site
-LAYOUT   = layout.html
-MARKDOWN = perl lib/Markdown.pl
+.PHONY: all publish clean
 
-.SILENT:
-.PHONY: all clean
+all: publish
 
-all:
-	mkdir -p $(OUTDIR)
-	$(call copy, favicon.ico)
-	$(call copy, static)
-	$(call mdown, index.markdown, $(LAYOUT), $(OUTDIR)/index.html)
+publish:
+	emacs --batch -l ~/.emacs.d/init.el -l publish-twurst.el -f publish-twurst.com
 
 clean:
-	rm -frv $(OUTDIR) | sed -e 's/^/RM $0/'
-
-define copy
-	cp -vr $1 $(OUTDIR)
-endef
-
-define mdown
-	@echo MDOWN $1 '>' $3
-	awk '/{{content}}/ { system("$(MARKDOWN) $1"); next } /.*/' $2 > $3
-endef
+	rm -fr _site

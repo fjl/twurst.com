@@ -1,0 +1,11 @@
+#+STARTUP: showeverything
+
+* ⥁ Hi, I'm Felix
+
+I like building software (using Common Lisp, Erlang, Go) and enjoy music. I write code for
+[[https://github.com/ethereum/go-ethereum][go-ethereum]]. In case you want to contact me,
+send electronic mail to br@twurst.com. I'm [[https://github.com/fjl][@fjl on GitHub]].
+
+* Writings
+
+- [[file:articles/geth-1.5-api.org][A Stable Go Ethereum API]] (July 2016, WIP)
