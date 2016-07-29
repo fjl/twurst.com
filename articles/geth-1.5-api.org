@@ -4,15 +4,15 @@
 #+OPTIONS: num:nil ':t
 #+STARTUP: showall
 
-This document lays down my vision for a stable Go API for the Ethereum blockchain. While
-go-ethereum is highly modular and has offered documented APIs for a long time, we have not
-paid much attention to keeping those Go APIs stable. The impending merge of the light
-client presents another challenge: how can Go libraries and applications interact with
-Ethereum irrespective of the protocol that is used to fetch and send the data?
+It's about time for a stable Go API to the Ethereum blockchain. While go-ethereum is
+highly modular and has offered documented APIs for a long time, we have not paid much
+attention to keeping those Go APIs stable. The impending merge of the light client
+presents another challenge: how can Go libraries and applications interact with Ethereum
+irrespective of the protocol that is used to fetch and send the data?
 
-The 1.4 release did a first stab at an app developer focused API for contracts. The
+The 1.4 release had a first stab at an app developer focused API for contracts. The
 accounts/abi/bind package works on top of an abstract backend with multiple supported
-implementations: the RPC client, an in-process full node and our unit test blockchain
+implementations: the RPC client, an in-process full node and the unit test blockchain
 generator.
 
 For the 1.5 release, I would like to expand the Go API to include blockchain access and
