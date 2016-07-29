@@ -6,9 +6,9 @@
 
 This document lays down my vision for a stable Go API for the Ethereum blockchain. While
 go-ethereum is highly modular and has offered documented APIs for a long time, we have not
-paid much attention to keeping those Go APIs stable. The introduction of the light client
-presents another challenge: how can Go libraries and applications interact with Ethereum
-irrespective of the protocol that is used to fetch and send the data?
+paid much attention to keeping those Go APIs stable. The impending merge of the light
+client presents another challenge: how can Go libraries and applications interact with
+Ethereum irrespective of the protocol that is used to fetch and send the data?
 
 The 1.4 release did a first stab at an app developer focused API for contracts. The
 accounts/abi/bind package works on top of an abstract backend with multiple supported
@@ -186,8 +186,8 @@ screen, it can be useful to subscribe to changes.
 - Should ~EstimateGas~ really exist in the API? Estimating gas basically runs the
   transaction as a contract call with lots of gas available and returns how much of it was
   used. We've discussed this before though and decided in favour of keeping it. If
-  ~CallContract~ is powerful enough (i.e. returns both gas and result data), ~EstimateGas~
-  can be implemented as a function in accounts/abi/bind.
+  ~CallContract~ returned both used gas and result data, ~EstimateGas~ could be
+  implemented as a function in accounts/abi/bind.
 
 * Three Implementations Of The Method Set
 
@@ -208,7 +208,7 @@ components (e.g. urlhint HTTP client, PoW miner) which are instantiated by ~eth.
 can be moved out and instantiated on top of the API.
 
 In the ~eth.Ethereum~ implementation of the API, the context parameter can be ignored
-because the underlying database operations are fast and cannot be canceled.
+because the underlying database operations are fast and cannot be cancelled.
 
 Usage Example:
 
@@ -271,24 +271,21 @@ Due to issue [[https://github.com/ethereum/go-ethereum/issues/2508][#2508]], ~ty
 ~MixDigest~. This makes it impossible to derive the correct block hash. I'll solve this by
 adding the field to the RPC response and checking for it in ethclient.
   
-* Development Roadmap
+* Development Roadmap (Updated {{{modification-time(%Y-%m-%d)}}})
 
 My ambitious target for landing the new API is the geth 1.5 release.
 The work required can be included step-by-step (list roughly in dependency order):
 
-- [X] RPC client that can handle subscriptions
-- [ ] ethclient.Client needs to be written (WIP)
-- [ ] 'simulated' contract backend needs a place and BalanceAt, CodeAt methods
+- [X] ~rpc.Client~ implementation that can handle subscriptions
+- [ ] ~ethclient.Client~ implementation (WIP)
+- [ ] Viability test of ethclient in the swarm codebase
+  - The code is already structured using a caller-defined interface with very similar methods.
+- [ ] The 'simulated' contract backend needs a place and ~BalanceAt~, ~CodeAt~ methods.
 - [ ] accounts/abi/bind/backends can be removed
-- [ ] eth/filters needs support for channel subscriptions (Bas WIP)
-- [ ] API methods for eth.Ethereum
+- [ ] eth/filters needs support for channel subscriptions (WIP)
+- [ ] Add API methods to ~eth.Ethereum~
    - This will require some reorganising to move code from internal/ethapi into 'eth'.
    - The native contract backend can be removed when done.
-- [ ] build/ci.go changes for vendoring (see below) need to happen if/when we switch to
-  using a 'vendor' directory instead of Godeps.
-
-We will do a viability test of ethclient in the SWARM codebase because the code is already
-structured using a caller-defined interface with very similar methods.
 
 * Aside: Import Hygiene And Vendoring Issues
 
@@ -310,15 +307,15 @@ go-ethereum code base.
 
 Vendored dependencies places more restrictions on the argument and result types. Since
 go-ethereum contains both commands and library code, it is affected by the [[https://groups.google.com/forum/#!topic/golang-dev/4FfTBfN2YaI][vendoring edge
-case]]. Almost all API methods reference the ~Context~ type, import from
+case]]. Almost all API methods reference the ~Context~ type, imported from
 ~golang.org/x/net/context~. In Go 1.7, package context has moved to the standard library
 but it'll take a while before go-ethereum can import it from there.
 
 Until then, the solution for this issue will be to vendor certain packages in a separate
 tree under build/. The ci.go build script can add the additional vendor tree to GOPATH
 during compilation, ensuring a deterministic build. Go projects importing our API can
-import/vendor their own version of the respective dependencies. This works for packages
-which have a reasonably stable interface (i.e. it works for context).
+import and vendor their own version of the respective dependencies. This works for
+packages which have a reasonably stable interface (i.e. it works for context).
 
 Here's what the resulting directory tree will look like:
 
