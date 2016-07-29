@@ -24,7 +24,7 @@ body {
 #content {
     min-width: 30ex;
     max-width: 90ex;
-    margin: 1em 2%;
+    margin: 1em 0.8em;
 }
 
 a:link, a:hover, a:active, a:visited {

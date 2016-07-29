@@ -1,37 +1,27 @@
 body {
-    max-width: 100%;
     margin: 0;
     font: normal normal normal 16px/1.6em georgia,serif;
     color: #333;
 }
 
-@media all and (min-width: 95ex) {
-    #content {
-        margin: 1% 2%;
-        max-width: 95ex;
-    }
-
-    .creator {
-        float: right;
-    }
-
-    p, .org-ul {
-        max-width: 95ex;
-    }
+#content {
+    margin: 0 0.8em;
 }
 
-@media not all and (min-width: 110ex) {
-    .creator {
-        float: left;
-    }
+@media all and (min-width: 95ex) {
+    p, .org-ul { max-width: 95ex; }
+    .creator { float: right; }
+}
 
-    p img {
-        width: 95%;
-    }
+@media not all and (min-width: 95ex) {
+    #content { width: 99 %; margin: 0 0.1em 0 0.8em; }
+    pre { overflow: scroll; }
+    .creator { float: left; }
+    p img { width: 95%; }
 }
 
 #article-header {
-    padding: 1em 2%;
+    padding: 1em 0 1em 5ex;
     display: block;
     border-bottom: 5px solid #ccc;
     background-color: #3b6043;
@@ -46,6 +36,16 @@ body {
     color: white;
     font-weight: bold;
     text-decoration: none;
+}
+
+#article-header-box {
+    position: absolute;
+    top: 1em;
+    left: 0.8em;
+}
+
+.nowrap {
+    white-space: nowrap;
 }
 
 #table-of-contents a {
@@ -180,22 +180,14 @@ td,th {
 
 code {
     color: #333;
-    white-space: pre;
+    white-space: pre-wrap;
     font: normal normal normal 14px/1.6em monospace;
 }
 
 pre {
     font: normal normal normal 14px/1.6em monospace;
-    margin: 1.2em;
+    margin: 1.2em 0 1.2em 1.2em;
 }
-
-/*
-   pre.src {
-   overflow: auto;
-   position: relative;
-   font-size: 90%;
-   }
- */
 
 blockquote {
     margin: 1em 2em;

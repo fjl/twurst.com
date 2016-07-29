@@ -8,7 +8,7 @@
 (defun make-twurst-article-preamble (plist)
   (let ((filename (file-name-nondirectory (plist-get plist :input-file)))
         (date     (org-export-get-date plist "%Y-%m-%d")))
-    (format "<div id=\"article-header\"><a href=\"../index.html\">░░ twurst.com</a> / %s (%s)</div>"
+    (format "<div id=\"article-header\"><span id=\"article-header-box\">░░</span><a href=\"../index.html\">twurst.com</a> / %s <span class=\"nowrap\">(%s)</span></div>"
             filename date)))
 
 (setq twurst-projects
@@ -24,6 +24,7 @@
          :babel-evaluate nil
          :html-doctype "html5"
          :html-html5-fancy t
+         :html-divs ((preamble "div" "preamble") (content "main" "content") (postamble "div" "postamble"))
          :html-checkbox-type html
          :html-htmlize-output-type css
          :html-postamble ""
