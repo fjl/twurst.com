@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/fjl
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://twurst.com
+  * I am fjl (https://keybase.io/fjl) on keybase.
+  * I have a public key ASCg5SUIjNC8QbEaAU_bwf0nKeRQ2dXvfR8kHOu0DsZ4Ago
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "010143d49c95267919ea4498cd54e2ecc0a3b56946c0a355fc7e4c6e1d7cae8b61d10a",
+            "host": "keybase.io",
+            "kid": "0120a0e525088cd0bc41b11a014fdbc1fd2729e450d9d5ef7d1f241cebb40ec678020a",
+            "uid": "77d0df13e980e6fa1438bd3fc8c17c19",
+            "username": "fjl"
+        },
+        "service": {
+            "hostname": "twurst.com",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.16"
+    },
+    "ctime": 1470755144,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1470755082,
+        "hash": "9e4bfe03f6a9671039abd36ed1542debf9ee84bc4dbe7869d2fab813fe1f7aa4f4af153a6ebb05ff8019552456026237ff2be2c48e396a6107100f4a6b0a8a3d",
+        "seqno": 566955
+    },
+    "prev": "0f1946d7baae20d9ea540aa3159c88bb0e0975a790dd07d6e219cc935601349e",
+    "seqno": 9,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+g6Rib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgoOUlCIzQvEGxGgFP28H9JynkUNnV730fJBzrtA7GeAIKp3BheWxvYWTFAu17ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxNDNkNDljOTUyNjc5MTllYTQ0OThjZDU0ZTJlY2MwYTNiNTY5NDZjMGEzNTVmYzdlNGM2ZTFkN2NhZThiNjFkMTBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwYTBlNTI1MDg4Y2QwYmM0MWIxMWEwMTRmZGJjMWZkMjcyOWU0NTBkOWQ1ZWY3ZDFmMjQxY2ViYjQwZWM2NzgwMjBhIiwidWlkIjoiNzdkMGRmMTNlOTgwZTZmYTE0MzhiZDNmYzhjMTdjMTkiLCJ1c2VybmFtZSI6ImZqbCJ9LCJzZXJ2aWNlIjp7Imhvc3RuYW1lIjoidHd1cnN0LmNvbSIsInByb3RvY29sIjoiaHR0cHM6In0sInR5cGUiOiJ3ZWJfc2VydmljZV9iaW5kaW5nIiwidmVyc2lvbiI6MX0sImNsaWVudCI6eyJuYW1lIjoia2V5YmFzZS5pbyBnbyBjbGllbnQiLCJ2ZXJzaW9uIjoiMS4wLjE2In0sImN0aW1lIjoxNDcwNzU1MTQ0LCJleHBpcmVfaW4iOjUwNDU3NjAwMCwibWVya2xlX3Jvb3QiOnsiY3RpbWUiOjE0NzA3NTUwODIsImhhc2giOiI5ZTRiZmUwM2Y2YTk2NzEwMzlhYmQzNmVkMTU0MmRlYmY5ZWU4NGJjNGRiZTc4NjlkMmZhYjgxM2ZlMWY3YWE0ZjRhZjE1M2E2ZWJiMDVmZjgwMTk1NTI0NTYwMjYyMzdmZjJiZTJjNDhlMzk2YTYxMDcxMDBmNGE2YjBhOGEzZCIsInNlcW5vIjo1NjY5NTV9LCJwcmV2IjoiMGYxOTQ2ZDdiYWFlMjBkOWVhNTQwYWEzMTU5Yzg4YmIwZTA5NzVhNzkwZGQwN2Q2ZTIxOWNjOTM1NjAxMzQ5ZSIsInNlcW5vIjo5LCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQHLHJ7yy/8kU/dZ4dB9tG2D65Jh9PyEJLH03/z47pXMgTgVeXuJft6pG0xNyR/5Q1UKysIZo9XJf7fdEOAJx7A+oc2lnX3R5cGUgo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/fjl
+
+==================================================================

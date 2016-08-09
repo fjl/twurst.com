@@ -55,7 +55,7 @@
         ("twurst-assets"
          :base-directory ,twurst-project-dir
          :publishing-directory ,twurst-output-dir
-         :base-extension "png\\|svg\\|ico"
+         :base-extension "png\\|svg\\|ico\\|txt"
          :publishing-function org-publish-attachment)
         
         ("twurst-style-assets"
