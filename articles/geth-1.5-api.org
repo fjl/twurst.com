@@ -42,10 +42,10 @@ full blocks whenever possible.
       BlockByNumber(ctx context.Context, number *big.Int) (*types.Block, error)
       HeaderByHash(ctx context.Context, hash common.Hash) (*types.Header, error)
       HeaderByNumber(ctx context.Context, number *big.Int) (*types.Header, error)
+      TransactionCount(ctx context.Context, blockHash common.Hash) (uint, error)
       TransactionInBlock(ctx context.Context, blockHash common.Hash, index uint) (*types.Transaction, error)
-      TransactionByHash(ctx context.Context, hash common.Hash) (*types.Transaction, error)
-      ReceiptByHash(ctx context.Context, txHash common.Hash) (*types.Receipt, error)
-      ReceiptInBlock(ctx context.Context, blockHash common.Hash, index uint) (*types.Receipt, error)
+      TransactionByHash(ctx context.Context, txHash common.Hash) (*types.Transaction, error)
+      TransactionReceipt(ctx context.Context, txHash common.Hash) (*types.Receipt, error)
   }
 #+END_SRC
 
@@ -56,7 +56,7 @@ many cases, calling a contract can be preferable to reading its storage directly
 #+BEGIN_SRC go
   type ChainStateReader interface {
       BalanceAt(ctx context.Context, account common.Address, blockNumber *big.Int) (*big.Int, error)
-      StorageAt(ctx context.Context, account common.Address, offset int, blockNumber *big.Int) ([]byte, error)
+      StorageAt(ctx context.Context, account common.Address, key common.Hash, blockNumber *big.Int) ([]byte, error)
       CodeAt(ctx context.Context, account common.Address, blockNumber *big.Int) ([]byte, error)
       NonceAt(ctx context.Context, account common.Address, blockNumber *big.Int) (uint64, error)
   }
@@ -66,7 +66,7 @@ You can subscribe for notifications whenever the canonical head block is updated
 
 #+BEGIN_SRC go
   type ChainHeadEventer interface {
-      SubscribeNewHeaders(ctx context.Context, ch chan<- *types.Header) (event.Subscription, error)
+      SubscribeNewHead(ctx context.Context, ch chan<- *types.Header) (event.Subscription, error)
   }
 #+END_SRC
 
@@ -81,7 +81,7 @@ properly typed way to perform calls.
 #+BEGIN_SRC go
   type CallMsg struct {
       From     common.Address // the sender of the 'transaction'
-      To       common.Address // the destination contract
+      To       *common.Address // the destination contract (nil for contract creation)
       Gas      *big.Int       // if nil, the call executes with near-infinite gas
       GasPrice *big.Int       // wei <-> gas exchange ratio
       Value    *big.Int       // amount of wei sent along with the call
@@ -182,14 +182,6 @@ screen, it can be useful to subscribe to changes.
   }
 #+END_SRC
 
-** TODO Open Questions
-
-- Should ~EstimateGas~ really exist in the API? Estimating gas basically runs the
-  transaction as a contract call with lots of gas available and returns how much of it was
-  used. We've discussed this before though and decided in favour of keeping it. If
-  ~CallContract~ returned both used gas and result data, ~EstimateGas~ could be
-  implemented as a function in accounts/abi/bind.
-
 * Three Implementations Of The Method Set
 
 Note that this section talks about code which is not written or merged yet.
@@ -278,15 +270,15 @@ My ambitious target for landing the new API is the geth 1.5 release.
 The work required can be included step-by-step (list roughly in dependency order):
 
 - [X] ~rpc.Client~ implementation that can handle subscriptions
-- [ ] ~ethclient.Client~ implementation (WIP)
-- [ ] Viability test of ethclient in the swarm codebase
+- [X] ~ethclient.Client~ implementation (WIP)
+- [X] Viability test of ethclient in the swarm codebase
   - The code is already structured using a caller-defined interface with very similar methods.
-- [ ] The 'simulated' contract backend needs a place and ~BalanceAt~, ~CodeAt~ methods.
-- [ ] accounts/abi/bind/backends can be removed
-- [ ] eth/filters needs support for channel subscriptions (WIP)
+- [X] The 'simulated' contract backend needs a place and ~BalanceAt~, ~CodeAt~ methods.
+- [X] remote and nil backends can be removed from accounts/abi/bind/backends
+- [X] eth/filters needs support for channel subscriptions (WIP)
 - [ ] Add API methods to ~eth.Ethereum~
-   - This will require some reorganising to move code from internal/ethapi into 'eth'.
-   - The native contract backend can be removed when done.
+  - This will require some reorganising to move code from internal/ethapi into 'eth'.
+  - The native contract backend can be removed when done.
 
 /Updated: {{{modification-time(%Y-%m-%d)}}}/
 
