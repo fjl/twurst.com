@@ -1,10 +1,9 @@
-EFLAGS = -l ~/.emacs.d/init.el
 .PHONY: all publish sync clean
 
 all: publish
 
 publish:
-	emacs --batch $(EFLAGS) -l publish-twurst.el -f publish-twurst.com
+	emacs --batch -l ~/.emacs.d/lisp/init-bootstrap.el -l publish-twurst.el -f publish-twurst.com
 
 sync: publish
 	rsync -rtvu --delete-delay _site fjl@twurst.com:/srv/www/twurst.com/source/
