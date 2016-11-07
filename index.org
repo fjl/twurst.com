@@ -8,6 +8,9 @@ I like building software (using Common Lisp, Erlang, Go) and enjoy music. I writ
 [[https://github.com/ethereum/go-ethereum][go-ethereum]]. In case you want to contact me,
 send electronic mail to br@twurst.com. I'm [[https://github.com/fjl][@fjl on GitHub]].
 
+[[file:fjl-pgp-key.txt][PGP Key]] (6047 0B71 5865 392D E43D 75A3 337E 68FC E058 A81C)
+
 * Writings
 
 - [[file:articles/geth-1.5-api.org][A Stable Go Ethereum API]] (July 2016, WIP)
+
