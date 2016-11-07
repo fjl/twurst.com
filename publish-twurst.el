@@ -71,6 +71,7 @@
 
 (defun publish-twurst.com ()
   (interactive)
-  (let ((org-publish-project-alist twurst-projects))
+  (let ((org-publish-project-alist twurst-projects)
+        (org-html-htmlize-output-type 'css))
     (org-publish "twurst.com" t)))
 
