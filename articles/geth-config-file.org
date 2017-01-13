@@ -1,0 +1,194 @@
+#+TITLE: Geth Configuration File Proposal
+#+AUTHOR: Felix Lange <fjl@ethereum.org>
+#+DATE: <2017-01-12 Thu>
+#+OPTIONS: num:nil ':t
+#+STARTUP: showall
+
+This proposal outlines how geth, swarm and the go-ethereum library could use a unified
+configuration mechanism. Users have [[https://github.com/ethereum/go-ethereum/issues/2067][asked]] [[https://github.com/ethereum/go-ethereum/issues/3332][us]] to make configuration of geth easier. It is
+not uncommon to run geth with many options set, leading to long, messy command lines.
+
+#+BEGIN_EXAMPLE
+  geth --nat=extip:43.124.512.22 --port 30404 --maxpeers=100 \
+       --fast --lightserv=70 --lightpeers=50 \
+       --ethstats "name:secret@ethstats.net" \
+       --rpc --rpcport 8080 --rpccorsdomain "mysite.ro"
+#+END_EXAMPLE
+
+Before diving into the actual proposal, it might be useful to look at the current state of
+the art of geth configuration:
+
+Geth accepts 75 command line flags. The set of accepted flags has evolved over time. The
+behaviour of geth's flags can be categorized into two classes: configuration options (the
+vast majority) and actions, listed below:
+
+- ~--unlock~ ::
+     Contains a list of account designators to unlock on startup. When specified, geth
+     prompts for the password of these accounts.
+- ~--exec~, ~--preload~ ::
+     Run a JS expression or file (these only apply for some sub-commands)
+
+While most flags option-like flags control a single setting, some of them have a complex
+effect that modifies multiple config values at once:
+
+- ~--dev~ ::
+     Disables p2p communication, switches the data directory to a temporary location, sets
+     up the Olympic network genesis block.
+- ~--testnet~ ::
+     Switches the data directory to a non-mainnet location, sets up the Ropsten network
+     genesis block.
+
+In addition to command-line flags, geth reads ~static-nodes.json~ and ~trusted-nodes.json~
+as a list of p2p node addresses. The content of these files cannot be set or overridden
+via a command line flag.
+
+To set up a new geth instance that doesn't connect to the Ethereum mainnet or testnet,
+users need to run ~geth init~ and supply a genesis block in JSON format. The genesis block
+file also includes chain configuration values to define hard fork switchover points of the
+resulting blockchain.
+
+On startup of a geth instance, an object graph is constructed and configured using values
+from these three sources. Library packages across go-ethereum accept their config as a
+struct, e.g.
+
+#+BEGIN_SRC go
+  package eth
+
+  type Config struct {
+	  ChainConfig *params.ChainConfig
+	  NetworkId  int    // Network ID to use for selecting peers to connect to
+	  Genesis    string // Genesis JSON to seed the chain database with
+	  FastSync   bool   // Enables the state download based fast synchronisation algorithm
+	  LightMode  bool   // Running in light client mode
+	  LightServ  int    // Maximum percentage of time allowed for serving LES requests
+	  LightPeers int    // Maximum number of LES client peers
+	  ...
+  }
+#+END_SRC
+
+With all that in mind we can move on the main topic, configuration files.
+
+* Proposal
+
+I propose that geth should accept a new command-line flag, ~--config~. Its argument should
+specify a [[https://github.com/toml-lang/toml][TOML]] file to be loaded. The file would contain configuration sections which map
+directly to the internal configuration model of the go-ethereum library. As a safety
+measure, the file must not be world-writable. Geth should refuse to launch with incorrect
+config file permissions.
+
+Settings supplied through command-line flags would override settings in the file.
+
+~static-nodes.json~ and ~trusted-nodes.json~ are superseded by the new mechanism and
+support for them could be removed.
+
+Mapping to the Go API configuration model provides a nice incentive to improve it, though
+this is out of scope for the introduction of config file support. For example, 'chain
+configuration' is handled during flag processing but should probably move into the eth
+service initialization to make use of the library more convenient.
+
+** Implementation
+
+The cmd/utils package would define the top-level configuration structure, linking section
+names to the relevant package. The configuration structs across the library would need to
+be modified to include TOML metadata. Settings that shouldn't be settable through the file
+can be marked using the ~"toml:"-"~ struct tag.
+
+#+BEGIN_SRC go
+  type config struct {
+	  P2P  *p2p.Config  `toml:"p2p"`
+	  Eth  *eth.Config  `toml:"eth"`
+	  Node *node.Config `toml:"node"`
+  }
+#+END_SRC
+
+Defaults (previously stored in command line flag defintions) would be moved to a global
+object.
+
+#+BEGIN_SRC go
+  var config = config{
+	  P2P: &p2p.Config{
+		  ListenAddr: ":30303",
+		  ...
+	  },
+	  ...
+  }
+#+END_SRC
+
+The file can be loaded using one of the reflection-driven TOML decoders available on
+GitHub. [[https://godoc.org/github.com/naoina/toml][github.com/naoina/toml]] is a good choice because it tracks line numbers and adds
+them to the error message if decoding fails.
+
+#+BEGIN_SRC  go
+  func (cfg *config) loadFile(file string) (*config, error) {
+	  data, err := ioutil.ReadFile(file)
+	  if err != nil {
+		  return nil, err
+	  }
+	  if err := toml.Unmarshal(data, cfg); err != nil {
+		  return nil, fmt.Errorf("%s: %v", file, err)
+	  }
+	  return &cfg, nil
+  }
+#+END_SRC
+
+Once the file is loaded, values from CLI flags are applied to the ~config~. This will
+require larger changes because the code is currently set up to initialize the config
+structs without paying attention to previously set values.
+
+** Example
+
+This example configuration replaces the long command line from the introduction:
+
+#+BEGIN_SRC conf
+  [p2p]
+  nat = "extip:43.124.512.22"
+  listenAddr = ":30304"
+  maxPeers = 100
+
+  [node]
+  httpHost = "127.0.0.1"
+  httpPort = 8080
+  httpCors = "mysite.ro"
+
+  [eth]
+  fastSync = true
+  lightServ = 70
+  lightPeers = 50
+
+  [ethstats]
+  endpoint = "name:secret@ethstats.net"
+#+END_SRC
+
+** Another Example: preimage.ethereum.org.
+
+This could be the configuration file which runs preimage.ethereum.org, a storage debugging
+service which we are preparing to launch in the near future. The example demonstrates how
+structured configuration can go beyond the possibilities of CLI flags. Note how an
+arbitrary number of RPC endpoints can be set up with different policies.
+
+#+BEGIN_SRC conf
+  [p2p]
+  staticNodes = [
+	  "enode://...",
+	  "enode://...",
+  ]
+
+  [eth]
+  enablePreimageRecording = true
+  fastSync = false
+
+  # The Internet-facing HTTP listener is restricted to storage debugging.
+  [[node.rpcEndpoints]]
+  protocol = "http"
+  listenAddr = "0.0.0.0:8545"
+  methodWhitelist = [
+	  "debug_preimage",
+	  "debug_storageRangeAt",
+  ]
+
+  # Also add a regular IPC listener on the default endpoint.
+  # This can be used to attach a console.
+  [[node.rpcEndpoints]]
+  protocol = "ipc"
+  listenAddr = "~/.ethereum/geth.ipc"
+#+END_SRC
