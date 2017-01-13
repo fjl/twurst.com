@@ -120,16 +120,16 @@ The file can be loaded using one of the reflection-driven TOML decoders availabl
 GitHub. [[https://godoc.org/github.com/naoina/toml][github.com/naoina/toml]] is a good choice because it tracks line numbers and adds
 them to the error message if decoding fails.
 
-#+BEGIN_SRC  go
-  func (cfg *config) loadFile(file string) (*config, error) {
+#+BEGIN_SRC go
+  func (cfg *config) loadFile(file string) error {
 	  data, err := ioutil.ReadFile(file)
 	  if err != nil {
-		  return nil, err
+		  return err
 	  }
 	  if err := toml.Unmarshal(data, cfg); err != nil {
-		  return nil, fmt.Errorf("%s: %v", file, err)
+		  return fmt.Errorf("%s: %v", file, err)
 	  }
-	  return &cfg, nil
+	  return nil
   }
 #+END_SRC
 
