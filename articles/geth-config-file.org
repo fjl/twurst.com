@@ -92,7 +92,7 @@ service initialization to make use of the library more convenient.
 The cmd/utils package would define the top-level configuration structure, linking section
 names to the relevant package. The configuration structs across the library would need to
 be modified to include TOML metadata. Settings that shouldn't be settable through the file
-can be marked using the ~"toml:"-"~ struct tag. Some types (e.g. ~common.Address~) should
+can be marked using the ~`toml:"-"`~ struct tag. Some types (e.g. ~common.Address~) should
 be extended with the ~UnmarshalText~ method to make decoding possible.
 
 #+BEGIN_SRC go
