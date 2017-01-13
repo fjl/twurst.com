@@ -54,12 +54,12 @@ struct, e.g.
 
   type Config struct {
 	  ChainConfig *params.ChainConfig
-	  NetworkId  int    // Network ID to use for selecting peers to connect to
-	  Genesis    string // Genesis JSON to seed the chain database with
-	  FastSync   bool   // Enables the state download based fast synchronisation algorithm
-	  LightMode  bool   // Running in light client mode
-	  LightServ  int    // Maximum percentage of time allowed for serving LES requests
-	  LightPeers int    // Maximum number of LES client peers
+	  NetworkId   int    // Network ID to use for selecting peers to connect to
+	  Genesis     string // Genesis JSON to seed the chain database with
+	  FastSync    bool   // Enables the state download based fast synchronisation algorithm
+	  LightMode   bool   // Running in light client mode
+	  LightServ   int    // Maximum percentage of time allowed for serving LES requests
+	  LightPeers  int    // Maximum number of LES client peers
 	  ...
   }
 #+END_SRC
