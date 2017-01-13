@@ -9,7 +9,7 @@ body {
 }
 
 @media all and (min-width: 95ex) {
-    p, .org-ul { max-width: 95ex; }
+    p, .org-ul, .org-dl { max-width: 95ex; }
     .creator { float: right; }
 }
 
