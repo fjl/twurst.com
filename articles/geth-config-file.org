@@ -1,4 +1,4 @@
-#+TITLE: Geth Configuration File Proposal
+#+TITLE: Geth Configuration File
 #+AUTHOR: Felix Lange <fjl@ethereum.org>
 #+DATE: <2017-01-12 Thu>
 #+OPTIONS: num:nil ':t
@@ -16,11 +16,9 @@ not uncommon to run geth with many options set, leading to long, messy command l
 #+END_EXAMPLE
 
 Before diving into the actual proposal, it might be useful to look at the current state of
-the art of geth configuration:
-
-Geth accepts 75 command line flags. The set of accepted flags has evolved over time. The
-behaviour of geth's flags can be categorized into two classes: configuration options (the
-vast majority) and actions, listed below:
+the art of geth configuration: Geth accepts 75 command line flags. The set of accepted
+flags has evolved over time. The behaviour of geth's flags can be categorized into two
+classes: configuration options (the vast majority) and actions, listed below.
 
 - ~--unlock~ ::
      Contains a list of account designators to unlock on startup. When specified, geth
@@ -29,7 +27,7 @@ vast majority) and actions, listed below:
      Run a JS expression or file (these only apply for some sub-commands)
 
 While most flags option-like flags control a single setting, some of them have a complex
-effect that modifies multiple config values at once:
+effect that modifies multiple config values at once.
 
 - ~--dev~ ::
      Disables p2p communication, switches the data directory to a temporary location, sets
@@ -66,23 +64,26 @@ struct, e.g.
   }
 #+END_SRC
 
-With all that in mind we can move on the main topic, configuration files.
-
 * Proposal
 
 I propose that geth should accept a new command-line flag, ~--config~. Its argument should
 specify a [[https://github.com/toml-lang/toml][TOML]] file to be loaded. The file would contain configuration sections which map
 directly to the internal configuration model of the go-ethereum library. As a safety
 measure, the file must not be world-writable. Geth should refuse to launch with incorrect
-config file permissions.
-
-Settings supplied through command-line flags would override settings in the file.
+config file permissions. Geth command-line flags should override settings in the file.
 
 ~static-nodes.json~ and ~trusted-nodes.json~ are superseded by the new mechanism and
 support for them could be removed.
 
-Mapping to the Go API configuration model provides a nice incentive to improve it, though
-this is out of scope for the introduction of config file support. For example, 'chain
+An important goal behind mapping to the Go API configuration model is to make it useful
+without any flag processing. Library users can configure go-ethereum via a file, too.
+Commands which embed the light client (like cmd/swarm) could mount the relevant config
+structs into their own top-level structure and load files in the same way. cmd/swarm
+already handles configuration in a way that is very similar to this proposal. It could
+benefit from the increased readability of TOML.
+
+Direct access to the Go configuration provides a nice incentive to improve it, though this
+is out of scope for the introduction of config file support. For example, 'chain
 configuration' is handled during flag processing but should probably move into the eth
 service initialization to make use of the library more convenient.
 
@@ -91,7 +92,8 @@ service initialization to make use of the library more convenient.
 The cmd/utils package would define the top-level configuration structure, linking section
 names to the relevant package. The configuration structs across the library would need to
 be modified to include TOML metadata. Settings that shouldn't be settable through the file
-can be marked using the ~"toml:"-"~ struct tag.
+can be marked using the ~"toml:"-"~ struct tag. Some types (e.g. ~common.Address~) should
+be extended with the ~UnmarshalText~ method to make decoding possible.
 
 #+BEGIN_SRC go
   type config struct {
@@ -101,8 +103,8 @@ can be marked using the ~"toml:"-"~ struct tag.
   }
 #+END_SRC
 
-Defaults (previously stored in command line flag defintions) would be moved to a global
-object.
+Defaults -- previously stored in command line flag defintions -- would be moved to a
+global object.
 
 #+BEGIN_SRC go
   var config = config{
@@ -132,8 +134,8 @@ them to the error message if decoding fails.
 #+END_SRC
 
 Once the file is loaded, values from CLI flags are applied to the ~config~. This will
-require larger changes because the code is currently set up to initialize the config
-structs without paying attention to previously set values.
+require larger changes because the code is set up to initialize the config structs without
+paying attention to previously set values.
 
 ** Example
 
