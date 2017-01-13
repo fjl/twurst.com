@@ -12,5 +12,6 @@ send electronic mail to br@twurst.com. I'm [[https://github.com/fjl][@fjl on Git
 
 * Writings
 
+- [[file:articles/geth-config-file.org][Geth Configuration File]] (January 2017)
 - [[file:articles/geth-1.5-api.org][A Stable Go Ethereum API]] (July 2016, WIP)
 
