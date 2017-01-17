@@ -15,12 +15,18 @@
   (when-let (output (org-html-headline headline contents info))
     (replace-regexp-in-string
      "<\\(h[123]\\) id=\"\\([^\"]+\\)\"[^>]*>[^<]*</\\1>"
-     (lambda (match)
-       (format "<a href=\"#%s\" class=\"headline-link\">%s</a>" (match-string 2 match) match))
+     "<a href=\"#\\2\" class=\"headline-link\">\\&</a>"
      output)))
 
+(defun twurst-article-html-template (contents info)
+  (replace-regexp-in-string
+   "<h1 class=\"title\">[^<]*</h1>"
+   "<a href=\"#\" class=\"headline-link\">\\&</a>"
+   (org-html-template contents info)))
+
 (org-export-define-derived-backend 'twurst-article-html 'html
-  :translate-alist '((headline . twurst-article-html-headline)))
+  :translate-alist '((headline . twurst-article-html-headline)
+                     (template . twurst-article-html-template)))
 
 (defun twurst-publish-article-to-html (plist filename pub-dir)
   (org-publish-org-to 'twurst-article-html filename
