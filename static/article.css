@@ -131,15 +131,24 @@ p img {
     vertical-align: middle;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
     color: #000;
     line-height: 1.6em;
     font-weight: 400;
     letter-spacing: -1;
 }
 
-h4,h5,h6 {
+h4, h5, h6 {
     font-size: 1em;
+}
+
+.headline-link {
+    text-decoration: none;
+}
+
+.headline-link:hover h1::after, .headline-link:hover h2::after, .headline-link:hover h3::after {
+    content: " ¶";
+    color: #aaa;
 }
 
 table {

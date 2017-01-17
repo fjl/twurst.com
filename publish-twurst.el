@@ -11,12 +11,30 @@
     (format "<div id=\"article-header\"><span id=\"article-header-box\">░░</span><a href=\"../index.html\">twurst.com</a> / %s <span class=\"nowrap\">(%s)</span></div>"
             filename date)))
 
+(defun twurst-article-html-headline (headline contents info)
+  (when-let (output (org-html-headline headline contents info))
+    (replace-regexp-in-string
+     "<\\(h[123]\\) id=\"\\([^\"]+\\)\"[^>]*>[^<]*</\\1>"
+     (lambda (match)
+       (format "<a href=\"#%s\" class=\"headline-link\">%s</a>" (match-string 2 match) match))
+     output)))
+
+(org-export-define-derived-backend 'twurst-article-html 'html
+  :translate-alist '((headline . twurst-article-html-headline)))
+
+(defun twurst-publish-article-to-html (plist filename pub-dir)
+  (org-publish-org-to 'twurst-article-html filename
+                      (concat "." (or (plist-get plist :html-extension)
+                                      org-html-extension
+                                      "html"))
+                      plist pub-dir))
+
 (setq twurst-projects
       `(("twurst-articles"
          :base-directory ,(concat twurst-project-dir "articles/")
          :base-extension "org"
          :publishing-directory ,(concat twurst-output-dir "articles/")
-         :publishing-function org-html-publish-to-html
+         :publishing-function twurst-publish-article-to-html
          :section-numbers nil
          :with-toc nil
          :with-author t
@@ -51,13 +69,13 @@
          :html-postamble ""
          :html-head-include-default-style nil
          :html-head "<link rel=\"stylesheet\" href=\"static/home.css\">")
-        
+
         ("twurst-assets"
          :base-directory ,twurst-project-dir
          :publishing-directory ,twurst-output-dir
          :base-extension "png\\|svg\\|ico\\|txt"
          :publishing-function org-publish-attachment)
-        
+
         ("twurst-style-assets"
          :base-directory ,(concat twurst-project-dir "static/")
          :publishing-directory ,(concat twurst-output-dir "static/")
@@ -75,4 +93,3 @@
         (org-html-htmlize-output-type 'css)
         (tab-width 4))
     (org-publish "twurst.com" t)))
-
