@@ -5,6 +5,7 @@
 (require 'ox-rss)
 (require 'ox-org)
 (require 'htmlize)
+(require 'ob-go)
 
 ;; HTML Article Backend
 
