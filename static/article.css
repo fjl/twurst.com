@@ -198,6 +198,13 @@ pre {
     margin: 1.2em 0 1.2em 2em;
 }
 
+.org-src-container + pre.example::before {
+    content: "";
+    display: block;
+    width: 30em;
+    border-top: 1px solid #ccc;
+}
+
 blockquote {
     margin: 1em 2em;
     padding-left: 1em;
