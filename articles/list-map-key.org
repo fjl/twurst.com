@@ -1,0 +1,81 @@
+#+TITLE: Linked Lists As Map Keys -- A Weird Go Trick
+#+AUTHOR: Felix Lange <fjl@twurst.com>
+#+DATE: <2017-09-24 Sun>
+#+OPTIONS: num:nil ':t
+#+STARTUP: showall
+
+Sometimes the simplest things can be surprising. In this installment, we'll explore Go
+value equality and a subtlety regarding non-pointer interface values. A hat tip to [[https://blog.notdot.net/][Nick
+Johnson]], who told me of this trick when discussing his smart EVM disassembler "evmdis".
+
+Let's say you're iterating a hierarchy in Go and you want to track whether a certain path
+of arbitrary length has been visited. The easiest way is to store all visited paths in a
+map. This is straightforward if your path is a string, but what if the elements of your
+path are structured objects? Turns out you can still use a map!
+
+Here's an example. This is the path element:
+
+#+BEGIN_SRC go :eval no
+  type elem struct {
+      name  string
+      index int
+  }
+#+END_SRC
+
+Go slices can't be used as map keys. So you can't do this:
+
+#+BEGIN_SRC go :eval no
+  type path []elem
+
+  seen := make(map[path]bool) // Error: invalid map key type path
+  seen[path{{"foo", 1}, {"bar", 2}}] = true
+#+END_SRC
+
+But you can do this:
+
+#+BEGIN_SRC go :imports fmt :exports both
+  type path interface{} // elem | nil
+
+  type elem struct {
+      name  string
+      index int
+      link  path
+  }
+
+  seen := make(map[path]bool)
+  path1 := elem{"foo", 1, elem{"bar", 2, nil}}
+  path2 := elem{"foo", 1, elem{"bar", 99, nil}}
+
+  seen[path1] = true
+  fmt.Println("seen path1? →", seen[path1])
+  fmt.Println("seen path2? →", seen[path2])
+#+END_SRC
+
+#+RESULTS:
+: seen path1? → true
+: seen path2? → false
+
+** What's happening there?
+
+Map keys must be comparable and use the same rules as the equality operator. Intuitively,
+you can think of [[https://golang.org/ref/spec#Comparison_operators][Go comparisons]] as being shallow, not deep. Go values are equal when their
+content is equal. References are not followed. But there's a catch for interfaces, which
+are a kind of reference:
+
+#+BEGIN_QUOTE
+Interface values are comparable. Two interface values are equal if they have identical
+dynamic types and equal dynamic values or if both have value nil.
+#+END_QUOTE
+
+When comparing the ~elem~ struct, all fields including ~link~ are compared. In our case,
+the dynamic value of is of type ~elem~ (or ~nil~), which leads to... recursion! The
+equality operator traverses the whole list, checking for deep equality.
+
+** Should I use this in production code?
+
+There is a huge downside to this trick: the struct's fields must be comparable. There is
+no way to declare your intent of comparability to the compiler. If the element type were
+modified by someone who is unaware of the subtlety, you might get a nice crash or worse, a
+false positive.
+
+So no, don't use this in production code. But it might come in handy some day.
