@@ -206,7 +206,7 @@ pre {
 }
 
 blockquote {
-    margin: 1em 2em;
+    margin: 1em 0.5em;
     padding-left: 1em;
     border-left: 3px solid #ccc;
 }
