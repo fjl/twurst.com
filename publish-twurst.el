@@ -6,11 +6,12 @@
 (require 'ox-org)
 (require 'htmlize)
 (require 'ob-go)
+(require 'dash)
 
 ;; HTML Article Backend
 
 (defun twurst-article-html-headline (headline contents info)
-  (when-let (output (org-html-headline headline contents info))
+  (-when-let (output (org-html-headline headline contents info))
     (replace-regexp-in-string
      "<\\(h[123]\\) id=\"\\([^\"]+\\)\"[^>]*>[^<]*</\\1>"
      "<a href=\"#\\2\" class=\"headline-link\">\\&</a>"
@@ -90,22 +91,21 @@ the Org file `index-file`."
     (insert output)
     (newline)))
 
-(defun twurst-org-rss-sitemap (project &optional sitemap-filename)
+(defun twurst-org-rss-sitemap (title file-list)
   "Creates an Org file containing all org files matched by the project."
-  (let* ((project-plist (cdr project))
-         (dir (file-name-as-directory (plist-get project-plist :base-directory)))
-         (localdir (file-name-directory dir))
-         (exclude-regexp (plist-get project-plist :exclude))
-         (files (nreverse (org-publish-get-base-files project exclude-regexp)))
-         (sitemap-filename (concat dir (or sitemap-filename "sitemap.rssfeed")))
+  (message "%S" file-list)
+  (let* ((files (s-split "\n" (org-list-to-generic file-list (list :ifmt (lambda (_ link) (twurst-link-target link))))))
          (org-inhibit-startup t))
+    (message "%S" files)
     (with-temp-buffer
       (erase-buffer)
       (dolist (file files)
-        (unless (equal (file-truename sitemap-filename)
-                       (file-truename file))
-          (twurst-insert-org-rss-article file)))
-      (write-file sitemap-filename))))
+        (twurst-insert-org-rss-article file)))
+      (buffer-string)))
+
+(defun twurst-link-target (link)
+  (let ((sub (substring link 7)))
+    (substring sub 0 (s-index-of "]" sub))))
 
 (defadvice org-rss-final-function (around twurst-disable-rss-indent first (contents backend info))
   contents)
@@ -165,13 +165,13 @@ the Org file `index-file`."
          :publishing-function twurst-publish-sitemap-rss-feed
          :html-link-home "https://twurst.com/"
          :html-link-use-abs-url nil
-         :title "Twursted Articles"
+         :title "twurst.com Articles"
          :email "fjl@twurst.com"
          :rss-feed-url "https://twurst.com/articles/feed.xml"
          :rss-image-url "https://twurst.com/static/feed.png"
          :sitemap-function twurst-org-rss-sitemap
          :sitemap-filename "feed.rssfeed"
-         :sitemap-sort-files :chronologically
+         :sitemap-sort-files chronologically
          :auto-sitemap t)
 
         ("twurst-index"
