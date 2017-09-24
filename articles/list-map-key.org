@@ -68,7 +68,7 @@ dynamic types and equal dynamic values or if both have value nil.
 #+END_QUOTE
 
 When comparing the ~elem~ struct, all fields including ~link~ are compared. In our case,
-the dynamic value of is of type ~elem~ (or ~nil~), which leads to... recursion! The
+the dynamic value of is of type ~elem~ or ~nil~ -- recursion! The
 equality operator traverses the whole list, checking for deep equality.
 
 ** Should I use this in production code?
