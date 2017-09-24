@@ -219,5 +219,6 @@ the Org file `index-file`."
   (interactive)
   (let ((org-publish-project-alist twurst-projects)
         (org-html-htmlize-output-type 'css)
-        (tab-width 4))
+        (tab-width 4)
+        (org-export-babel-evaluate nil))
     (org-publish "twurst.com" t)))
