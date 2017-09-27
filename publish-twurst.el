@@ -149,7 +149,8 @@ the Org file `index-file`."
          :babel-evaluate nil
          :html-doctype "html5"
          :html-html5-fancy t
-         :html-divs ((preamble "div" "preamble") (content "main" "content") (postamble "div" "postamble"))
+         :html-divs ((preamble "div" "preamble") (content "article" "content") (postamble "div" "postamble"))
+         :html-container "section"
          :html-checkbox-type html
          :html-htmlize-output-type css
          :html-postamble ""
