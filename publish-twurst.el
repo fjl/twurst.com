@@ -185,6 +185,7 @@ the Org file `index-file`."
          :with-toc nil
          :with-author nil
          :with-date nil
+         :with-title nil
          :babel-evaluate nil
          :html-doctype "html5"
          :html-html5-fancy t
