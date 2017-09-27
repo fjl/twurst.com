@@ -14,7 +14,7 @@ body {
 }
 
 @media not all and (min-width: 95ex) {
-    #content { width: 99 %; margin: 0 0.1em 0 0.8em; }
+    #content { width: 99%; margin: 0 0.1em 0 0.8em; }
     pre { overflow-x: scroll; overflow-y: hidden; }
     .creator { float: left; }
     p img { width: 95%; }
@@ -135,7 +135,6 @@ h1, h2, h3, h4, h5, h6 {
     color: #000;
     line-height: 1.6em;
     font-weight: 400;
-    letter-spacing: -1;
 }
 
 h4, h5, h6 {
