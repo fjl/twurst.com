@@ -13,13 +13,13 @@
 (defun twurst-article-html-headline (headline contents info)
   (-when-let (output (org-html-headline headline contents info))
     (replace-regexp-in-string
-     "\\(<\\(h[123]\\) id=\"\\([^\"]+\\)\"[^>]*>.*\\)</\\2>"
+     "\\(<\\(h[123]\\) id=\"\\([^\"]+\\)\"[^>]*>[^<]*\\)</\\2>"
      "\\1<a href=\"#\\3\" class=\"headline-link\"></a></\\2>"
      output)))
 
 (defun twurst-article-html-template (contents info)
   (replace-regexp-in-string
-   "\\(<h1 class=\"title\">.*\\)</h1>"
+   "\\(<h1 class=\"title\">[^<]*\\)</h1>"
    "\\1<a href=\"#\" class=\"headline-link\"></a></h1>"
    (org-html-template contents info)))
 
