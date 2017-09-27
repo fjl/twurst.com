@@ -200,8 +200,14 @@ pre {
 .org-src-container + pre.example::before {
     content: "";
     display: block;
-    width: 30em;
+    margin: 0;
+    height: 1px;
+    width: 30ex;
     border-top: 1px solid #ccc;
+}
+
+.org-src-container + pre.example {
+    font-style: italic;
 }
 
 blockquote {
