@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font: normal normal normal 16px/1.6em georgia,serif;
+    font: normal normal normal 11pt/1.6em georgia,serif;
     color: #333;
 }
 
@@ -14,7 +14,7 @@ body {
 }
 
 @media not all and (min-width: 95ex) {
-    #content { width: 99%; margin: 0 0.1em 0 0.8em; }
+    #content { width: 95%; margin: 0 0.1em 0 0.8em; }
     pre { overflow-x: scroll; overflow-y: hidden; }
     .creator { float: left; }
     p img { width: 95%; }
@@ -189,11 +189,11 @@ td,th {
 code {
     color: #333;
     white-space: pre;
-    font: normal normal normal 14px/1.6em monospace;
+    font: normal normal normal 95%/1.6em monospace;
 }
 
 pre {
-    font: normal normal normal 14px/1.6em monospace;
+    font: normal normal normal 95%/1.6em monospace;
     margin: 1.2em 0 1.2em 2em;
 }
 
