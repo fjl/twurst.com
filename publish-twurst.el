@@ -93,10 +93,8 @@ the Org file `index-file`."
 
 (defun twurst-org-rss-sitemap (title file-list)
   "Creates an Org file containing all org files matched by the project."
-  (message "%S" file-list)
   (let* ((files (s-split "\n" (org-list-to-generic file-list (list :ifmt (lambda (_ link) (twurst-link-target link))))))
          (org-inhibit-startup t))
-    (message "%S" files)
     (with-temp-buffer
       (erase-buffer)
       (dolist (file files)
