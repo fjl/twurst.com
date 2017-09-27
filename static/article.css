@@ -144,11 +144,11 @@ h4, h5, h6 {
 
 .headline-link {
     text-decoration: none;
+    color: #aaa;
 }
 
-.headline-link:hover h1::after, .headline-link:hover h2::after, .headline-link:hover h3::after {
+h1:hover .headline-link:before, h2:hover .headline-link:before, h3:hover .headline-link:before {
     content: " ¶";
-    color: #aaa;
 }
 
 table {
