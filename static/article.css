@@ -194,7 +194,8 @@ code {
 
 pre {
     font: normal normal normal 95%/1.6em monospace;
-    margin: 1.2em 0 1.2em 2em;
+    margin: 1.2em 0;
+    padding: 0 0 0 2em;
 }
 
 .org-src-container + pre.example::before {
