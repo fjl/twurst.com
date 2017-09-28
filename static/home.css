@@ -1,7 +1,7 @@
 body {
     background-color: #3b6043;
     color: #ddd;
-    font: normal normal normal 16px/1.6em "Menlo", "Dejavu Sans Mono", "Bitstream Vera Sans Mono", "Panic Sans", "Droid Sans Mono", monospace;
+    font: normal normal normal 11pt/1.6em "Menlo", "Dejavu Sans Mono", "Bitstream Vera Sans Mono", "Panic Sans", "Droid Sans Mono", monospace;
     margin: 0;
     animation: bgtetrad 15s linear infinite alternate;
     -webkit-animation: bgtetrad 15s linear infinite alternate;
