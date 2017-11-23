@@ -132,7 +132,7 @@ the Org file `index-file`."
   (let ((filename (file-name-nondirectory (plist-get plist :input-file)))
         (date     (org-export-get-date plist "%Y-%m-%d")))
     (format "<div id=\"article-header\"><span id=\"article-header-box\">░░</span><a href=\"../index.html\">twurst.com</a> / %s <span class=\"nowrap\">(%s)</span></div>"
-            filename date)))
+            (file-name-base filename) date)))
 
 (setq twurst-projects
       `(("twurst-articles"
