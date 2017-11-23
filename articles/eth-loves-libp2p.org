@@ -34,10 +34,10 @@ new protocols (like uTP) that we can try out without too much work.
 
 Using the transports makes something else a lot easier: there's a project that tries to
 make Ethereum blockchain data available and linkable through ipfs (via ipld). Similarly,
-Swarm (the incentivized Ethereum file system) would be suitable a backend store for files
-ipfs because it solves the availability problem for files that few people are interested
-in. It'd be awesome if ipfs nodes could just speak to the Ethereum network to get
-blockchain data and Swarm files.
+Swarm (the incentivized Ethereum file system) would be suitable as a backend store for
+ipfs data because it solves the availability problem for files that few people are
+interested in. It'd be awesome if ipfs nodes could just speak to the Ethereum network to
+get blockchain data and Swarm files.
 
 ** Short Term Plan
 
