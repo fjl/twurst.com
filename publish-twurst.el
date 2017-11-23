@@ -194,6 +194,12 @@ the Org file `index-file`."
          :html-head-include-default-style nil
          :html-head "<link rel=\"stylesheet\" href=\"static/home.css\">")
 
+        ("twurst-files"
+         :base-directory ,(concat twurst-project-dir "files/")
+         :publishing-directory ,(concat twurst-output-dir "files/")
+         :base-extension ".*"
+         :publishing-function org-publish-attachment)
+
         ("twurst-assets"
          :base-directory ,twurst-project-dir
          :publishing-directory ,twurst-output-dir
@@ -211,7 +217,8 @@ the Org file `index-file`."
                       "twurst-article-feed"
                       "twurst-index"
                       "twurst-assets"
-                      "twurst-style-assets"))))
+                      "twurst-style-assets"
+                      "twurst-files"))))
 
 (setq org-publish-project-alist twurst-projects)
 
