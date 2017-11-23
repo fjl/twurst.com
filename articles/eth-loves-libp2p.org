@@ -1,0 +1,68 @@
+#+TITLE: Ethereum ♥ libp2p
+#+AUTHOR: Felix Lange <fjl@ethereum.org>
+#+DATE: <2017-11-19 Sun>
+
+I'm back from devcon3 and we discussed all the things! I spoke about my vision for devp2p
+in 2018 ([[file:../files/devcon3-evolving-devp2p.pdf][slides here]]). I mentioned libp2p integration options in the talk and also argued
+for moving toward libp2p in follow-up discussions. Naturally there were quite a few
+questions about that. This post is supposed to answer those.
+
+[[https://libp2p.io][libp2p]] is a core component of the ipfs project. It's a collection of libraries that are
+supposed to help with implementing peer-to-peer systems. People often ask: why doesn't
+Ethereum use libp2p?
+
+The answer is two-fold:
+
+- devp2p and libp2p aren't directly comparable because devp2p is a system and libp2p is a
+  framework. You can assemble a system out of libp2p's components, but the result might
+  not necessarily be compatible with another system that uses different components.
+
+- libp2p didn't exist when we started building the peer-to-peer networking stack for
+  Ethereum. There were discussions about building something together very early on, but in
+  the end we were more set on shipping a working system than to discussing how to make the
+  most flexible and generic framework.
+
+Now that devp2p has been in production use for two years, I feel it's time to revisit this
+topic. libp2p has come a long way too, with two interoperable implementations, a couple of
+transports and production use in ipfs.
+
+I've been thinking about ways to integrate libp2p for quite a while, but couldn't figure
+out how to make use of it in a way that fits. My initial goal was to join their DHT, but
+that turned out to be impractical. But there's a much easier thing we can do: use libp2p's
+transports and multiplexing algorithm. This saves us a bunch of code and gives us a few
+new protocols (like uTP) that we can try out without too much work.
+
+Using the transports makes something else a lot easier: there's a project that tries to
+make Ethereum blockchain data available and linkable through ipfs (via ipld). Similarly,
+Swarm (the incentivized Ethereum file system) would be suitable a backend store for files
+ipfs because it solves the availability problem for files that few people are interested
+in. It'd be awesome if ipfs nodes could just speak to the Ethereum network to get
+blockchain data and Swarm files.
+
+** Short Term Plan
+
+The work to integrate libp2p starts now:
+
+There will be a version of Whisper v6 that runs on libp2p. We've chosen Whisper as our
+experimentation vehicle because it's been lumping along without much use. Whisper peering
+sucks on devp2p because nobody runs it.
+
+There will also be a separate experiment to run the existing 'eth' application protocol
+(the one that relays blocks and transactions) on libp2p. We're not expecting this to
+become canonical anytime soon. It'll still be interesting to see whether we can get
+additional performance out of the multiplexing, though.
+
+** Long Term Plan
+
+The ultimate goal is to adopt libp2p's transport protocols as the way Ethereum nodes
+communicate. For this to work, those protocols need to be available to all relevant
+Ethereum node implementations. This will take time.
+
+We have a transition plan: future versions of the devp2p Node Discovery protocol will
+include 'node records' in which multiple transports can be listed. The proposed format for
+these records is [[https://github.com/ethereum/EIPs/pull/778][ENR]] (Ethereum Node
+Records).
+
+Once ENR is adopted and devp2p's application layer works on top of libp2p transports, we
+can start using the transports between compatible implementations. Everyone else can
+continue to use RLPx until we decide to turn it off.
