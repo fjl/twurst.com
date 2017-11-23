@@ -27,8 +27,8 @@ topic. libp2p has come a long way too, with two interoperable implementations, a
 transports and production use in ipfs.
 
 I've been thinking about ways to integrate libp2p for quite a while, but couldn't figure
-out how to make use of it in a way that fits. My initial goal was to join their DHT, but
-that turned out to be impractical. But there's a much easier thing we can do: use libp2p's
+out how to make use of it in a way that fits. My initial goal was to join their DHT, which
+turned out to be impractical. There's a much easier thing we can do though: use libp2p's
 transports and multiplexing algorithm. This saves us a bunch of code and gives us a few
 new protocols (like uTP) that we can try out without too much work.
 
