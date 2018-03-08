@@ -1,0 +1,90 @@
+#+TITLE: STUN Without Trusted Servers
+#+AUTHOR: Felix Lange <fjl@ethereum.org>
+#+DATE: <2018-03-08 Thu>
+
+I'm working on adding ENR support to go-ethereum. ENRs are self-signed documents that
+describe the capabilities and endpoints of nodes on the Ethereum peer-to-peer network.
+
+To sign a document that includes the nodes IP address, we need to actually know that
+address. But computers behind NAT are unaware of their external, Internet-facing IP
+address. There are two common ways find this address:
+
+1. Asking the router using UPnP or NAT-PMP
+2. Using STUN with a known server on the Internet
+
+The first option is simple but comes with a few disadvantages: the router might not speak
+UPnP or NAT-PMP, and it might know about the correct external IP either. This usually
+works on residential networks though.
+
+The second option is great if you trust in a certain STUN service. However, we do not wish
+to trust in such a service in a peer-to-peer network setting. Instead, information about
+the IP should be provided by other nodes in the network. The rest of this article is a
+collection of ideas around replicating STUN functionality without the usual server in the
+middle.
+
+** Determining The Mapped Address
+
+Our UDP-based protocol includes a field that echoes the observed IP and port back to the
+sender. Every time a request is sent, the corresponding reply states what the UDP envelope
+address of the request was. We can record those IPs as 'statements' of the form "node ~N~
+says my IP is ~A~ at time ~T~".
+
+#+BEGIN_SRC python
+  statements = {
+      "node_1": ("203.0.113.2", 1519984067),
+      "node_2": ("198.51.100.55", 1519984023),
+      ...
+  }
+#+END_SRC
+
+We can compute a prediction about the current external IP from those statements. We can't
+put too much trust into any particular statement because its ~N~ might be acting
+maliciously. If the external IP is mispredicted and then published in a signed document we
+might loose contact with the network because nobody finds us with that IP.
+
+Let's use a simple algorithm: The current prediction is the IP stated by the majority of
+nodes within a time window. If there is no clear majority, the predicted IP is undefined.
+
+#+BEGIN_SRC python
+  MIN_STATEMENTS = 10
+
+  def predict_ip(statements):
+      count, maxcount, predicted_ip = {}, 0, None
+      for (host, s) in statements.items():
+          ip = s[0]
+          count[ip] = count.get(ip, 0) + 1
+          if count[ip] > maxcount and count[ip] >= MIN_STATEMENTS:
+              maxcount, predicted_ip = c, ip
+      return predicted_ip
+#+END_SRC
+
+** Determining NAT Behavior
+
+Not all NAT setups are alike. For our purposes, the only distiction we need is whether the
+NAT is a /Full Cone NAT/ or not. A NAT with this property will relay all packets sent to
+the mapped port, even from hosts that we haven't talked to.
+
+#+ATTR_HTML: :width 500px
+#+CAPTION: Illustration of Full-Cone NAT, [[https://en.wikipedia.org/wiki/Network_address_translation#/media/File:Full_Cone_NAT.svg][from Wikipedia]]
+[[file:../files/Full_Cone_NAT.svg]]
+
+With STUN, checking for this property can be done by sending a request to one endpoint
+while requesting that the server's reply should be sent from a different endpoint. If the
+reply arrives, the NAT can be considered Full Cone.
+
+We can achieve this in by recording node identies which we have sent our record to:
+
+#+BEGIN_SRC python
+  contacted = {}
+
+  def on_send(host):
+      contacted[host] = time.monotonic()
+#+END_SRC
+
+If a node we haven't recently contacted sends a packet to us, we know the NAT is capable
+of full cone translation.
+
+#+BEGIN_SRC python
+  def is_full_cone_nat():
+      return any(host not in contacted for host in statements)
+#+END_SRC
