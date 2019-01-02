@@ -7,6 +7,7 @@
 (require 'htmlize)
 (require 'ob-go)
 (require 'dash)
+(require 's)
 
 ;; HTML Article Backend
 
