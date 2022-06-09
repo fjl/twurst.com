@@ -199,6 +199,7 @@ the Org file `index-file`."
          :base-directory ,(concat twurst-project-dir "files/")
          :publishing-directory ,(concat twurst-output-dir "files/")
          :base-extension ".*"
+         :recursive t
          :publishing-function org-publish-attachment)
 
         ("twurst-assets"
