@@ -2,6 +2,7 @@ body {
     background-color: #3b6043;
     color: #ddd;
     font: normal normal normal 11pt/1.6em "Menlo", "Dejavu Sans Mono", "Bitstream Vera Sans Mono", "Panic Sans", "Droid Sans Mono", monospace;
+    line-height: 1.8;
     margin: 0;
     animation: bgtetrad 15s linear infinite alternate;
     -webkit-animation: bgtetrad 15s linear infinite alternate;
@@ -27,13 +28,16 @@ body {
     margin: 1em 0.8em;
 }
 
-a:link, a:hover, a:active, a:visited {
+a {
     color: #FFFAFA;
+    text-decoration-color: #FFFAFA88;
+    text-underline-offset: 30%;
+    text-decoration-thickness: 10%;
 }
 
 ul {
-    list-style-type: none;
-    padding-left: 0;
+    list-style-type: square;
+    padding-left: 1em;
 }
 
 h1, h2, h3, h4, h5 {
