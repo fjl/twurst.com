@@ -13,6 +13,7 @@ h1 {
 
 main {
     max-width: 900px;
+    min-width: 420px;
     margin: 0 auto;
 }
 
