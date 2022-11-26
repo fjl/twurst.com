@@ -202,6 +202,13 @@
          :recursive t
          :publishing-function org-publish-attachment)
 
+        ("twurst-kanonen"
+         :base-directory ,(concat twurst-project-dir "kanonen/")
+         :publishing-directory ,(concat twurst-output-dir "kanonen/")
+         :base-extension ".*"
+         :recursive t
+         :publishing-function org-publish-attachment)
+
         ("twurst-assets"
          :base-directory ,twurst-project-dir
          :publishing-directory ,twurst-output-dir
@@ -217,6 +224,7 @@
         ("twurst.com"
          :components ("twurst-articles"
                       ;; "twurst-article-feed"
+                      "twurst-kanonen"
                       "twurst-index"
                       "twurst-assets"
                       "twurst-style-assets"

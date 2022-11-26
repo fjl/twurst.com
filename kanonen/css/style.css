@@ -1,0 +1,31 @@
+@import url('press-start.css');
+
+body {
+    background-color: seagreen;
+    font-family: sans-serif;
+    color: white;
+}
+
+h1 {
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.kanone {
+    border-top: 4px dotted black;
+    margin: 1em 0;
+}
+
+.kanone img {
+    width: 400px;
+    border: 4px solid black;
+}
+
+.kanone .teile {
+    width: 200px;
+}
