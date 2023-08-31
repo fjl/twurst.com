@@ -34,7 +34,7 @@
 - routing with bucket indexes
 - TALK request
 
-** Messages
+** discv5 Messages
 
 - ~PING~ / ~PONG~
   - liveness check, ENR sync
@@ -78,11 +78,11 @@ A 🠠 B   m(PONG)
 
 ** Routing
 
-[[./drawing_routing.svg]]
+[[./img/drawing_routing.svg]]
 
 ** Routing
 
-[[./drawing_routing2.svg]]
+[[./img/drawing_routing2.svg]]
 
 #+begin_example
 A 🠢 B   FINDNODE (255, 254, 256)
