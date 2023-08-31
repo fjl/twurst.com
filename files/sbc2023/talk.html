@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Intro to discv5</title>
+<meta name="author" content="Felix Lange"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/dist/theme/sky.css" id="theme"/>
+
+<link rel="stylesheet" href="clouds.css"/>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide">
+<h1 class="title">Intro to discv5</h1><h2 class="author">Felix Lange</h2>
+</section>
+
+<section>
+<section id="slide-orga4e6e14">
+<h2 id="orga4e6e14">Ethereum P2P</h2>
+<ul>
+<li>TCP connections between peers</li>
+<li>Execution Layer:
+<ul>
+<li>application protocols: eth, snap</li>
+
+</ul></li>
+<li>Consensus Layer:
+<ul>
+<li>libp2p-based connections</li>
+<li>RPC requests for sync, etc.</li>
+<li>GossipSub™ for broadcast</li>
+
+</ul></li>
+<li>Node Discovery</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc2d5b34">
+<h2 id="orgc2d5b34">discv4</h2>
+<ul>
+<li>created in 2015</li>
+<li>Kademlia without storing files</li>
+<li>DHT is database of all nodes</li>
+<li>node entries: {pubkey, ip, port, port}</li>
+<li>clock sync required</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org58616f6">
+<h2 id="org58616f6">discv5</h2>
+<ul>
+<li>no clock dependency</li>
+<li>ENRs instead of node tuples</li>
+<li>UDP with encryption/authentication
+<ul>
+<li>optimized for many quick connections</li>
+<li>self-synchronizing sessions</li>
+
+</ul></li>
+<li>routing with bucket indexes</li>
+<li>TALK request</li>
+
+</ul>
+
+</section>
+<section id="slide-org7399b36">
+<h3 id="org7399b36">Messages</h3>
+<ul>
+<li><code>PING</code> / <code>PONG</code>
+<ul>
+<li>liveness check, ENR sync</li>
+
+</ul></li>
+<li><code>FINDNODE</code> / <code>NODES</code>
+<ul>
+<li>requesting nodes at distance(s)</li>
+
+</ul></li>
+<li><code>TALKREQ</code> / <code>TALKRESP</code>
+<ul>
+<li>connection negotiation</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-orgb0ffc58">
+<h3 id="orgb0ffc58">Handshake flow (A)</h3>
+<pre class="example" id="orge911133">
+A 🠢 B   m(FINDNODE)
+A 🠠 B   challenge(d)
+A 🠢 B   h(FINDNODE, response(d))
+A 🠠 B   m(NODES)
+A 🠠 B   m(NODES)
+
+A 🠢 B   m(PING)
+A 🠠 B   m(PONG)
+</pre>
+
+</section>
+<section id="slide-org4be327e">
+<h3 id="org4be327e">Handshake flow (B)</h3>
+<pre class="example" id="org7f5a1c1">
+A 🠢 B   &lt;random data&gt;
+A 🠠 B   challenge(d)
+A 🠢 B   h(FINDNODE, response(d))
+A 🠠 B   m(NODES)
+A 🠠 B   m(NODES)
+
+A 🠢 B   m(PING)
+A 🠠 B   m(PONG)
+</pre>
+
+</section>
+<section id="slide-orgc482298">
+<h3 id="orgc482298">Session cache</h3>
+<ul>
+<li>LRU can be used</li>
+<li>typical capacity is 1000</li>
+<li>sessions will auto-reestablish if needed</li>
+<li>ENR caching is possible</li>
+
+</ul>
+
+</section>
+<section id="slide-org5f3261e">
+<h3 id="org5f3261e">Routing</h3>
+
+<div id="org7f52fd7" class="figure">
+<p><img src="./drawing_routing.svg" alt="drawing_routing.svg" class="org-svg" />
+</p>
+</div>
+
+</section>
+<section id="slide-orgf35d72e">
+<h3 id="orgf35d72e">Routing</h3>
+
+<div id="org5c0a736" class="figure">
+<p><img src="./drawing_routing2.svg" alt="drawing_routing2.svg" class="org-svg" />
+</p>
+</div>
+
+<pre class="example" id="orgfd48e98">
+A 🠢 B   FINDNODE (255, 254, 256)
+A 🠠 B   NODES
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-org3d920a3">
+<h2 id="org3d920a3">Node Records (ENR)</h2>
+<ul>
+<li><code>NODES</code> message contains ENRs</li>
+<li>300 bytes of self-signed node metadata</li>
+<li>~140 bytes used for pubkey, IP, ports&#x2026;</li>
+<li>remainder available to application</li>
+<li>sequence number for comparing versions</li>
+<li>identity schemes</li>
+
+</ul>
+
+</section>
+<section id="slide-org949e33d">
+<h3 id="org949e33d">ENR example</h3>
+<pre class="example" id="org0268f85">
+enr:-KG4QBGDTbrB8udGxEn-QhEFywTN7ucBMnkAUf-BVARI7X-bY2YzGrmVode9-
+SAtOzGrr4DAw7oPyzUxJx-vuEQDmG8UhGV0aDKQR-tys5AAAHL__________4JpZI
+J2NIJpcITPtPO7iXNlY3AyNTZrMaEDlzrVv1Fp355EsYz5t4NmD443jp4PuneFlk9
+K_38Sln-DdGNwgiMog3VkcIIjKA
+</pre>
+
+</section>
+<section id="slide-orgd6c4b41">
+<h3 id="orgd6c4b41">ENR example</h3>
+<pre class="example" id="orga0f927f">
+Node ID: 0008403b3ad4dcf13a995b8c898ab1d25fbd62eda16136acc990...
+Record has sequence number 20 and 6 key/value pairs.
+  "eth2"      9047eb72b390000072ffffffffffffffff
+  "id"        "v4"
+  "ip"        207.180.243.187
+  "secp256k1" a103973ad5bf5169df9e44b18cf9b783660f8e378e9e0fba...
+  "tcp"       9000
+  "udp"       9000
+</pre>
+
+</section>
+<section id="slide-org14e9415">
+<h3 id="org14e9415">ENR example</h3>
+<pre class="example" id="org5a5bed5">
+[
+  11834dbac1f2e746c449fe...    // sig
+  14,                          // seq
+  "eth2", 47eb72b390000072ffffffffffffffff,
+  "id", "v4",
+  "ip", cfb4f3bb,
+  "secp256k1", 03973ad5bf5169df9e44b18cf9b7...
+  "tcp", 2328,
+  "udp", 2328,
+]
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-org6e39d2f">
+<h2 id="org6e39d2f">Discovery</h2>
+<ul>
+<li>peer iteration</li>
+<li>random walk &#x2013; O(n)
+<ul>
+<li>ENR filtering</li>
+<li>TALKREQ pre-negotiation</li>
+
+</ul></li>
+
+<li>for sub O(n)
+<ul>
+<li>secondary indexes</li>
+<li>service discovery</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc523a61">
+<h2 id="orgc523a61">Implementations</h2>
+<ul>
+<li>go-ethereum: used in prysm, geth, erigon</li>
+<li>teku CL, besu EL (JVM)</li>
+<li>rust-libp2p: used in lighthouse, trin (PN)</li>
+<li>nim: used in status.im CL/EL/PN clients</li>
+<li>ethereumjs CL/EL</li>
+<li>nethermind (.NET) WIP</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org97b2df6">
+<h2 id="org97b2df6">Future Directions</h2>
+
+</section>
+</section>
+<section>
+<section id="slide-org96cc938">
+<h2 id="org96cc938">discv5.2</h2>
+<ul>
+<li>NAT hole punching mechanism</li>
+<li>concurrent handshake tie breaker</li>
+<li>other small protocol updates</li>
+
+</ul>
+
+</section>
+<section id="slide-org3be1108">
+<h3 id="org3be1108">Hole Punch Mechanism</h3>
+<pre class="example" id="orgb615a67">
+A 🠢 B   m(FINDNODE)                 hole A 🠠 B created
+...timeout...
+
+A 🠢 R   n(RELAYINIT: B)
+R 🠢 B   n(RELAYMSG: A)
+A 🠠 B   challenge(d)                hole A 🠢 B created
+A 🠢 B   h(FINDNODE, response(d))
+A 🠠 B   m(NODES)
+A 🠠 B   m(NODES)
+A 🠠 B   m(NODES)
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-org8fa4e4b">
+<h2 id="org8fa4e4b">Portal Network</h2>
+<ul>
+<li>overlay network</li>
+<li>extensions for data connections / µTP</li>
+<li>3 interoperable implementations</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf486530">
+<h2 id="orgf486530">Data Streams</h2>
+<ul>
+<li><a href="https://github.com/fjl/discv5-streams">https://github.com/fjl/discv5-streams</a></li>
+<li>TALK messages can be used to initiate data connection, share secrets</li>
+<li>multiplexing streams on discv5 UDP port</li>
+<li>↳ sharing port mapping</li>
+<li>µTP for reliable transfer, congestion control&#x2026;</li>
+<li>congestion is complicated :(</li>
+
+</ul>
+
+</section>
+<section id="slide-orgbb4943b">
+<h3 id="orgbb4943b">Stream Example</h3>
+<pre class="example" id="orge06d9de">
+A 🠢 B  TALKREQ (... initiator-secret, request data ...)
+A 🠠 B  TALKRESP (... recipient-secret, accept/rej ...)
+A 🠢 B  encrypted sub-protocol packet (µTP)
+A 🠠 B  encrypted sub-protocol packet (µTP)
+A 🠠 B  encrypted sub-protocol packet (µTP)
+</pre>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc9192ff">
+<h2 id="orgc9192ff">Service Discovery</h2>
+<ul>
+<li>research by DataHop (SBC last year :)</li>
+<li>additional table for topic ads</li>
+<li>fixed space overhead per node</li>
+<li>arbitrary number of labels/topics per node</li>
+<li>waiting time based admission</li>
+<li>discv5.3</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+<script src="./reveal.js/plugin/search/search.js"></script>
+<script src="./reveal.js/plugin/zoom/zoom.js"></script>
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+mouseWheel: false,
+fragmentInURL: false,
+hashOneBasedIndex: false,
+pdfSeparateFragments: true,
+overview: true,
+
+transition: 'fade',
+transitionSpeed: 'default',
+
+// Plugins with reveal.js 4.x
+plugins: [ RevealMarkdown, RevealNotes, RevealSearch, RevealZoom ],
+
+// Optional libraries used to extend reveal.js
+dependencies: [
+]
+
+});
+</script>
+</body>
+</html>

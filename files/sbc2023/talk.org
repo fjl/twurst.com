@@ -1,0 +1,213 @@
+#+TITLE: Intro to discv5
+#+AUTHOR: Felix Lange
+#+OPTIONS: toc:nil timestamp:nil num:nil
+#+REVEAL_THEME: sky
+#+REVEAL_EXTRA_CSS: clouds.css
+#+REVEAL_TRANS: fade
+
+* Ethereum P2P
+
+- TCP connections between peers
+- Execution Layer:
+  - application protocols: eth, snap
+- Consensus Layer:
+  - libp2p-based connections
+  - RPC requests for sync, etc.
+  - GossipSub™ for broadcast
+- Node Discovery
+
+* discv4
+
+- created in 2015
+- Kademlia without storing files
+- DHT is database of all nodes
+- node entries: {pubkey, ip, port, port}
+- clock sync required
+
+* discv5
+
+- no clock dependency
+- ENRs instead of node tuples
+- UDP with encryption/authentication
+  - optimized for many quick connections
+  - self-synchronizing sessions
+- routing with bucket indexes
+- TALK request
+
+** Messages
+
+- ~PING~ / ~PONG~
+  - liveness check, ENR sync
+- ~FINDNODE~ / ~NODES~
+  - requesting nodes at distance(s)
+- ~TALKREQ~ / ~TALKRESP~
+  - connection negotiation
+
+** Handshake flow (A)
+
+#+begin_example
+A 🠢 B   m(FINDNODE)
+A 🠠 B   challenge(d)
+A 🠢 B   h(FINDNODE, response(d))
+A 🠠 B   m(NODES)
+A 🠠 B   m(NODES)
+
+A 🠢 B   m(PING)
+A 🠠 B   m(PONG)
+#+end_example
+
+** Handshake flow (B)
+
+#+begin_example
+A 🠢 B   <random data>
+A 🠠 B   challenge(d)
+A 🠢 B   h(FINDNODE, response(d))
+A 🠠 B   m(NODES)
+A 🠠 B   m(NODES)
+
+A 🠢 B   m(PING)
+A 🠠 B   m(PONG)
+#+end_example
+
+** Session cache
+
+- LRU can be used
+- typical capacity is 1000
+- sessions will auto-reestablish if needed
+- ENR caching is possible
+
+** Routing
+
+[[./drawing_routing.svg]]
+
+** Routing
+
+[[./drawing_routing2.svg]]
+
+#+begin_example
+A 🠢 B   FINDNODE (255, 254, 256)
+A 🠠 B   NODES
+#+end_example
+
+* Node Records (ENR)
+
+- ~NODES~ message contains ENRs
+- 300 bytes of self-signed node metadata
+- ~140 bytes used for pubkey, IP, ports...
+- remainder available to application
+- sequence number for comparing versions
+- identity schemes
+
+** ENR example
+
+#+begin_example
+enr:-KG4QBGDTbrB8udGxEn-QhEFywTN7ucBMnkAUf-BVARI7X-bY2YzGrmVode9-
+SAtOzGrr4DAw7oPyzUxJx-vuEQDmG8UhGV0aDKQR-tys5AAAHL__________4JpZI
+J2NIJpcITPtPO7iXNlY3AyNTZrMaEDlzrVv1Fp355EsYz5t4NmD443jp4PuneFlk9
+K_38Sln-DdGNwgiMog3VkcIIjKA
+#+end_example
+
+** ENR example
+
+#+begin_example
+Node ID: 0008403b3ad4dcf13a995b8c898ab1d25fbd62eda16136acc990...
+Record has sequence number 20 and 6 key/value pairs.
+  "eth2"      9047eb72b390000072ffffffffffffffff
+  "id"        "v4"
+  "ip"        207.180.243.187
+  "secp256k1" a103973ad5bf5169df9e44b18cf9b783660f8e378e9e0fba...
+  "tcp"       9000
+  "udp"       9000
+#+end_example
+
+** ENR example
+
+#+begin_example
+[
+  11834dbac1f2e746c449fe...    // sig
+  14,                          // seq
+  "eth2", 47eb72b390000072ffffffffffffffff,
+  "id", "v4",
+  "ip", cfb4f3bb,
+  "secp256k1", 03973ad5bf5169df9e44b18cf9b7...
+  "tcp", 2328,
+  "udp", 2328,
+]
+#+end_example
+
+* Discovery
+
+- peer iteration
+- random walk -- O(n)
+  - ENR filtering
+  - TALKREQ pre-negotiation
+
+- for sub O(n)
+  - secondary indexes
+  - service discovery
+
+* Implementations
+
+- go-ethereum: used in prysm, geth, erigon
+- teku CL, besu EL (JVM)
+- rust-libp2p: used in lighthouse, trin (PN)
+- nim: used in status.im CL/EL/PN clients
+- ethereumjs CL/EL
+- nethermind (.NET) WIP
+
+* Future Directions
+
+* discv5.2
+
+- NAT hole punching mechanism
+- concurrent handshake tie breaker
+- other small protocol updates
+
+** Hole Punch Mechanism
+
+#+begin_example
+A 🠢 B   m(FINDNODE)                 hole A 🠠 B created
+...timeout...
+
+A 🠢 R   n(RELAYINIT: B)
+R 🠢 B   n(RELAYMSG: A)
+A 🠠 B   challenge(d)                hole A 🠢 B created
+A 🠢 B   h(FINDNODE, response(d))
+A 🠠 B   m(NODES)
+A 🠠 B   m(NODES)
+A 🠠 B   m(NODES)
+#+end_example
+
+* Portal Network
+
+- overlay network
+- extensions for data connections / µTP
+- 3 interoperable implementations
+
+* Data Streams
+
+- <https://github.com/fjl/discv5-streams>
+- TALK messages can be used to initiate data connection, share secrets
+- multiplexing streams on discv5 UDP port
+- ↳ sharing port mapping
+- µTP for reliable transfer, congestion control...
+- congestion is complicated :(
+
+** Stream Example
+
+#+begin_example
+A 🠢 B  TALKREQ (... initiator-secret, request data ...)
+A 🠠 B  TALKRESP (... recipient-secret, accept/rej ...)
+A 🠢 B  encrypted sub-protocol packet (µTP)
+A 🠠 B  encrypted sub-protocol packet (µTP)
+A 🠠 B  encrypted sub-protocol packet (µTP)
+#+end_example
+
+* Service Discovery
+
+- research by DataHop (SBC last year :)
+- additional table for topic ads
+- fixed space overhead per node
+- arbitrary number of labels/topics per node
+- waiting time based admission
+- discv5.3
