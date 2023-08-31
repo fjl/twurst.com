@@ -3,6 +3,10 @@
 #+OPTIONS: toc:nil timestamp:nil num:nil
 #+REVEAL_THEME: sky
 #+REVEAL_EXTRA_CSS: clouds.css
+#+REVEAL_TITLE_SLIDE_BACKGROUND: clouds.jpg
+#+REVEAL_TITLE_SLIDE_BACKGROUND_SIZE: cover
+#+REVEAL_DEFAULT_SLIDE_BACKGROUND: clouds.jpg
+#+REVEAL_DEFAULT_SLIDE_BACKGROUND_SIZE: cover
 #+REVEAL_TRANS: fade
 
 * Ethereum P2P
@@ -213,6 +217,9 @@ A 🠠 B  encrypted sub-protocol packet (µTP)
 - discv5.3
 
 * End
+ :PROPERTIES:
+    :reveal_background: ./flatirons.jpg
+ :END:
 
 - Specs: <https://github.com/ethereum/devp2p>
 - You can ask your question now

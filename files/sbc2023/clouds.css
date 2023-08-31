@@ -1,15 +1,17 @@
 .example { box-shadow: none !important; }
 
+/*
 .reveal-viewport {
     background: url(./clouds.jpg);
     background-size: cover;
 }
+*/
 
 #sec-title-slide {
     background: none;
 }
 
 .slides > section {
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
 }
