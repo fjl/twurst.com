@@ -211,3 +211,9 @@ A 🠠 B  encrypted sub-protocol packet (µTP)
 - arbitrary number of labels/topics per node
 - waiting time based admission
 - discv5.3
+
+* End
+
+- Specs: <https://github.com/ethereum/devp2p>
+- You can ask your question now
+- Thank you Matt for KademliaCon
