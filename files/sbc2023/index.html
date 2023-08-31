@@ -21,8 +21,8 @@
 </section>
 
 <section>
-<section id="slide-org507443f" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="org507443f">Ethereum P2P</h2>
+<section id="slide-orgfa7559a" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="orgfa7559a">Ethereum P2P</h2>
 <ul>
 <li>TCP connections between peers</li>
 <li>Execution Layer:
@@ -44,8 +44,8 @@
 </section>
 </section>
 <section>
-<section id="slide-org8ac8c39" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="org8ac8c39">discv4</h2>
+<section id="slide-org8982e00" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="org8982e00">discv4</h2>
 <ul>
 <li>created in 2015</li>
 <li>Kademlia without storing files</li>
@@ -58,8 +58,8 @@
 </section>
 </section>
 <section>
-<section id="slide-org0b6c0a1" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="org0b6c0a1">discv5</h2>
+<section id="slide-org0030dd5" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="org0030dd5">discv5</h2>
 <ul>
 <li>no clock dependency</li>
 <li>ENRs instead of node tuples</li>
@@ -75,8 +75,8 @@
 </ul>
 
 </section>
-<section id="slide-orgb7a5c1a" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="orgb7a5c1a">discv5 Messages</h3>
+<section id="slide-orgb836041" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="orgb836041">discv5 Messages</h3>
 <ul>
 <li><code>PING</code> / <code>PONG</code>
 <ul>
@@ -97,36 +97,36 @@
 </ul>
 
 </section>
-<section id="slide-orgbe250fa" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="orgbe250fa">Handshake flow (A)</h3>
-<pre class="example" id="org24827eb">
+<section id="slide-orgc5a151f" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="orgc5a151f">Handshake flow (A)</h3>
+<pre class="example" id="org7b7f276">
 A → B   m(FINDNODE)
 A ← B   challenge(d)
 A → B   h(FINDNODE, response(d))
 A ← B   m(NODES)
 A ← B   m(NODES)
-
+...
 A → B   m(PING)
 A ← B   m(PONG)
 </pre>
 
 </section>
-<section id="slide-orgd4925af" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="orgd4925af">Handshake flow (B)</h3>
-<pre class="example" id="org80d5c60">
+<section id="slide-org39d02f6" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="org39d02f6">Handshake flow (B)</h3>
+<pre class="example" id="org018f255">
 A → B   &lt;random data&gt;
 A ← B   challenge(d)
 A → B   h(FINDNODE, response(d))
 A ← B   m(NODES)
 A ← B   m(NODES)
-
+...
 A → B   m(PING)
 A ← B   m(PONG)
 </pre>
 
 </section>
-<section id="slide-org5ff6fe6" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="org5ff6fe6">Session cache</h3>
+<section id="slide-orgf4ee1fa" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="orgf4ee1fa">Session cache</h3>
 <ul>
 <li>LRU can be used</li>
 <li>typical capacity is 1000</li>
@@ -136,24 +136,24 @@ A ← B   m(PONG)
 </ul>
 
 </section>
-<section id="slide-orgcbc4aa0" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="orgcbc4aa0">Routing</h3>
+<section id="slide-org3531661" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="org3531661">Routing</h3>
 
-<div id="orgc4de93d" class="figure">
+<div id="orgcd746f4" class="figure">
 <p><img src="./img/drawing_routing.svg" alt="drawing_routing.svg" class="org-svg" />
 </p>
 </div>
 
 </section>
-<section id="slide-org1689e57" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="org1689e57">Routing</h3>
+<section id="slide-org52a61d4" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="org52a61d4">Routing</h3>
 
-<div id="orgde22e7a" class="figure">
+<div id="orgf8e6255" class="figure">
 <p><img src="./img/drawing_routing2.svg" alt="drawing_routing2.svg" class="org-svg" />
 </p>
 </div>
 
-<pre class="example" id="org5edef8a">
+<pre class="example" id="org53747ef">
 A → B   FINDNODE (255, 254, 256)
 A ← B   NODES
 </pre>
@@ -161,8 +161,8 @@ A ← B   NODES
 </section>
 </section>
 <section>
-<section id="slide-orgf32702b" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="orgf32702b">Node Records (ENR)</h2>
+<section id="slide-org35241a5" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="org35241a5">Node Records (ENR)</h2>
 <ul>
 <li><code>NODES</code> message contains ENRs</li>
 <li>300 bytes of self-signed node metadata</li>
@@ -174,9 +174,9 @@ A ← B   NODES
 </ul>
 
 </section>
-<section id="slide-org3782e2e" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="org3782e2e">ENR example</h3>
-<pre class="example" id="org5ea3a81">
+<section id="slide-org611ae42" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="org611ae42">ENR example</h3>
+<pre class="example" id="orgcc06db8">
 enr:-KG4QBGDTbrB8udGxEn-QhEFywTN7ucBMnkAUf-BVARI7X-bY2YzGrmVode9-
 SAtOzGrr4DAw7oPyzUxJx-vuEQDmG8UhGV0aDKQR-tys5AAAHL__________4JpZI
 J2NIJpcITPtPO7iXNlY3AyNTZrMaEDlzrVv1Fp355EsYz5t4NmD443jp4PuneFlk9
@@ -184,9 +184,9 @@ K_38Sln-DdGNwgiMog3VkcIIjKA
 </pre>
 
 </section>
-<section id="slide-org5a137ee" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="org5a137ee">ENR example</h3>
-<pre class="example" id="org6ea7b7b">
+<section id="slide-org765b9a8" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="org765b9a8">ENR example</h3>
+<pre class="example" id="org0e48ead">
 Node ID: 0008403b3ad4dcf13a995b8c898ab1d25fbd62eda16136acc990...
 Record has sequence number 20 and 6 key/value pairs.
   "eth2"      9047eb72b390000072ffffffffffffffff
@@ -198,9 +198,9 @@ Record has sequence number 20 and 6 key/value pairs.
 </pre>
 
 </section>
-<section id="slide-orgf44abbd" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="orgf44abbd">ENR example</h3>
-<pre class="example" id="org4fc4b16">
+<section id="slide-org70dbde5" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="org70dbde5">ENR example</h3>
+<pre class="example" id="orgd653b0c">
 [
   11834dbac1f2e746c449fe...    // sig
   14,                          // seq
@@ -216,8 +216,8 @@ Record has sequence number 20 and 6 key/value pairs.
 </section>
 </section>
 <section>
-<section id="slide-org696f430" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="org696f430">Discovery</h2>
+<section id="slide-orgb361d38" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="orgb361d38">Discovery</h2>
 <ul>
 <li>peer iteration</li>
 <li>random walk &#x2013; O(n)
@@ -239,8 +239,8 @@ Record has sequence number 20 and 6 key/value pairs.
 </section>
 </section>
 <section>
-<section id="slide-orgf6c6ea0" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="orgf6c6ea0">Implementations</h2>
+<section id="slide-orgd1755d6" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="orgd1755d6">Implementations</h2>
 <ul>
 <li>go-ethereum: used in prysm, geth, erigon</li>
 <li>teku CL, besu EL (JVM)</li>
@@ -254,14 +254,14 @@ Record has sequence number 20 and 6 key/value pairs.
 </section>
 </section>
 <section>
-<section id="slide-orge37a2b7" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="orge37a2b7">Future Directions</h2>
+<section id="slide-org647650a" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="org647650a">Future Directions</h2>
 
 </section>
 </section>
 <section>
-<section id="slide-org4b9ff5c" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="org4b9ff5c">discv5.2</h2>
+<section id="slide-org34a020b" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="org34a020b">discv5.2</h2>
 <ul>
 <li>NAT hole punching mechanism</li>
 <li>concurrent handshake tie breaker</li>
@@ -270,9 +270,9 @@ Record has sequence number 20 and 6 key/value pairs.
 </ul>
 
 </section>
-<section id="slide-orgfcc04ac" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="orgfcc04ac">Hole Punch Mechanism</h3>
-<pre class="example" id="orgced0c85">
+<section id="slide-orgc1870ba" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="orgc1870ba">Hole Punch Mechanism</h3>
+<pre class="example" id="org8ed2195">
 A → B   m(FINDNODE)                 hole A ← B created
 ...timeout...
 
@@ -288,8 +288,8 @@ A ← B   m(NODES)
 </section>
 </section>
 <section>
-<section id="slide-org2228dde" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="org2228dde">Portal Network</h2>
+<section id="slide-orge09c557" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="orge09c557">Portal Network</h2>
 <ul>
 <li>overlay network</li>
 <li>extensions for data connections / µTP</li>
@@ -300,8 +300,8 @@ A ← B   m(NODES)
 </section>
 </section>
 <section>
-<section id="slide-org18b6c0b" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="org18b6c0b">Data Streams</h2>
+<section id="slide-orgfb40a46" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="orgfb40a46">Data Streams</h2>
 <ul>
 <li><a href="https://github.com/fjl/discv5-streams">https://github.com/fjl/discv5-streams</a></li>
 <li>TALK messages can be used to initiate data connection, share secrets</li>
@@ -313,9 +313,9 @@ A ← B   m(NODES)
 </ul>
 
 </section>
-<section id="slide-org37243a1" data-background="clouds.jpg" data-background-size="cover">
-<h3 id="org37243a1">Stream Example</h3>
-<pre class="example" id="orgf6fa247">
+<section id="slide-org4821dd2" data-background="clouds.jpg" data-background-size="cover">
+<h3 id="org4821dd2">Stream Example</h3>
+<pre class="example" id="orgc53ba25">
 A → B  TALKREQ (... initiator-secret, request data ...)
 A ← B  TALKRESP (... recipient-secret, accept/rej ...)
 A → B  encrypted sub-protocol packet (µTP)
@@ -326,8 +326,8 @@ A ← B  encrypted sub-protocol packet (µTP)
 </section>
 </section>
 <section>
-<section id="slide-orgc0b1734" data-background="clouds.jpg" data-background-size="cover">
-<h2 id="orgc0b1734">Service Discovery</h2>
+<section id="slide-org4d6a1e3" data-background="clouds.jpg" data-background-size="cover">
+<h2 id="org4d6a1e3">Service Discovery</h2>
 <ul>
 <li>research by DataHop (SBC last year :)</li>
 <li>additional table for topic ads</li>
@@ -341,8 +341,8 @@ A ← B  encrypted sub-protocol packet (µTP)
 </section>
 </section>
 <section>
-<section id="slide-orgab92742" data-background="./flatirons.jpg" data-background-size="cover">
-<h2 id="orgab92742">End</h2>
+<section id="slide-org8ff28f6" data-background="./flatirons.jpg" data-background-size="cover">
+<h2 id="org8ff28f6">End</h2>
 <ul>
 <li>Specs: <a href="https://github.com/ethereum/devp2p">https://github.com/ethereum/devp2p</a></li>
 <li>Thank you Matt for KademliaCon :)</li>

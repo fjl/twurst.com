@@ -55,7 +55,7 @@ A ← B   challenge(d)
 A → B   h(FINDNODE, response(d))
 A ← B   m(NODES)
 A ← B   m(NODES)
-
+...
 A → B   m(PING)
 A ← B   m(PONG)
 #+end_example
@@ -68,7 +68,7 @@ A ← B   challenge(d)
 A → B   h(FINDNODE, response(d))
 A ← B   m(NODES)
 A ← B   m(NODES)
-
+...
 A → B   m(PING)
 A ← B   m(PONG)
 #+end_example
