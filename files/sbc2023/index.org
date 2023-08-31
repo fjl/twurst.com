@@ -93,6 +93,13 @@ A → B   FINDNODE (255, 254, 256)
 A ← B   NODES
 #+end_example
 
+** Table Tricks
+
+- randomized refresh timer
+- ENR sync w/ PING
+- liveness check before relay
+- table/bucket IP limits
+
 * Node Records (ENR)
 
 - ~NODES~ message contains ENRs
