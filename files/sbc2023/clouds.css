@@ -2,7 +2,7 @@
 
 .reveal-viewport {
     background: url(./clouds.jpg);
-    background-size: 100% auto;
+    background-size: cover;
 }
 
 #sec-title-slide {
