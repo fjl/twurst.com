@@ -97,31 +97,31 @@
 </ul>
 
 </section>
-A 🠢 B   m(FINDNODE)
-A 🠠 B   challenge(d)
-A 🠢 B   h(FINDNODE, response(d))
-A 🠠 B   m(NODES)
-A 🠠 B   m(NODES)
-
-A 🠢 B   m(PING)
-A 🠠 B   m(PONG)
 <section id="slide-org39a88bc" data-background="clouds.jpg" data-background-size="cover">
 <h3 id="org39a88bc">Handshake flow (A)</h3>
 <pre class="example" id="orgfaad5e6">
+A →← B   m(FINDNODE)
+A ← B   challenge(d)
+A → B   h(FINDNODE, response(d))
+A ← B   m(NODES)
+A ← B   m(NODES)
+
+A → B   m(PING)
+A ← B   m(PONG)
 </pre>
 
 </section>
-A 🠢 B   &lt;random data&gt;
-A 🠠 B   challenge(d)
-A 🠢 B   h(FINDNODE, response(d))
-A 🠠 B   m(NODES)
-A 🠠 B   m(NODES)
 <section id="slide-org81f01ea" data-background="clouds.jpg" data-background-size="cover">
 <h3 id="org81f01ea">Handshake flow (B)</h3>
 <pre class="example" id="org77a4f61">
+A → B   &lt;random data&gt;
+A ← B   challenge(d)
+A → B   h(FINDNODE, response(d))
+A ← B   m(NODES)
+A ← B   m(NODES)
 
-A 🠢 B   m(PING)
-A 🠠 B   m(PONG)
+A → B   m(PING)
+A ← B   m(PONG)
 </pre>
 
 </section>
@@ -153,9 +153,9 @@ A 🠠 B   m(PONG)
 </p>
 </div>
 
-<pre class="example" id="org5dda7d2">
-A 🠢 B   FINDNODE (255, 254, 256)
-A 🠠 B   NODES
+<pre class="example" id="org8264541">
+A → B   FINDNODE (255, 254, 256)
+A ← B   NODES
 </pre>
 
 </section>
@@ -270,19 +270,19 @@ Record has sequence number 20 and 6 key/value pairs.
 </ul>
 
 </section>
-A 🠢 B   m(FINDNODE)                 hole A 🠠 B created
 <section id="slide-org398ddfa" data-background="clouds.jpg" data-background-size="cover">
 <h3 id="org398ddfa">Hole Punch Mechanism</h3>
 <pre class="example" id="orge9e793a">
+A → B   m(FINDNODE)                 hole A ← B created
 ...timeout...
 
-A 🠢 R   n(RELAYINIT: B)
-R 🠢 B   n(RELAYMSG: A)
-A 🠠 B   challenge(d)                hole A 🠢 B created
-A 🠢 B   h(FINDNODE, response(d))
-A 🠠 B   m(NODES)
-A 🠠 B   m(NODES)
-A 🠠 B   m(NODES)
+A → R   n(RELAYINIT: B)
+R → B   n(RELAYMSG: A)
+A ← B   challenge(d)                hole A → B created
+A → B   h(FINDNODE, response(d))
+A ← B   m(NODES)
+A ← B   m(NODES)
+A ← B   m(NODES)
 </pre>
 
 </section>
@@ -313,14 +313,14 @@ A 🠠 B   m(NODES)
 </ul>
 
 </section>
-A 🠢 B  TALKREQ (... initiator-secret, request data ...)
-A 🠠 B  TALKRESP (... recipient-secret, accept/rej ...)
-A 🠢 B  encrypted sub-protocol packet (µTP)
-A 🠠 B  encrypted sub-protocol packet (µTP)
-A 🠠 B  encrypted sub-protocol packet (µTP)
 <section id="slide-orgd28e02c" data-background="clouds.jpg" data-background-size="cover">
 <h3 id="orgd28e02c">Stream Example</h3>
 <pre class="example" id="orge4932b9">
+A → B  TALKREQ (... initiator-secret, request data ...)
+A ← B  TALKRESP (... recipient-secret, accept/rej ...)
+A → B  encrypted sub-protocol packet (µTP)
+A ← B  encrypted sub-protocol packet (µTP)
+A ← B  encrypted sub-protocol packet (µTP)
 </pre>
 
 </section>

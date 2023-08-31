@@ -50,27 +50,27 @@
 ** Handshake flow (A)
 
 #+begin_example
-A 🠢 B   m(FINDNODE)
-A 🠠 B   challenge(d)
-A 🠢 B   h(FINDNODE, response(d))
-A 🠠 B   m(NODES)
-A 🠠 B   m(NODES)
+A → B   m(FINDNODE)
+A ← B   challenge(d)
+A → B   h(FINDNODE, response(d))
+A ← B   m(NODES)
+A ← B   m(NODES)
 
-A 🠢 B   m(PING)
-A 🠠 B   m(PONG)
+A → B   m(PING)
+A ← B   m(PONG)
 #+end_example
 
 ** Handshake flow (B)
 
 #+begin_example
-A 🠢 B   <random data>
-A 🠠 B   challenge(d)
-A 🠢 B   h(FINDNODE, response(d))
-A 🠠 B   m(NODES)
-A 🠠 B   m(NODES)
+A → B   <random data>
+A ← B   challenge(d)
+A → B   h(FINDNODE, response(d))
+A ← B   m(NODES)
+A ← B   m(NODES)
 
-A 🠢 B   m(PING)
-A 🠠 B   m(PONG)
+A → B   m(PING)
+A ← B   m(PONG)
 #+end_example
 
 ** Session cache
@@ -89,8 +89,8 @@ A 🠠 B   m(PONG)
 [[./img/drawing_routing2.svg]]
 
 #+begin_example
-A 🠢 B   FINDNODE (255, 254, 256)
-A 🠠 B   NODES
+A → B   FINDNODE (255, 254, 256)
+A ← B   NODES
 #+end_example
 
 * Node Records (ENR)
@@ -170,16 +170,16 @@ Record has sequence number 20 and 6 key/value pairs.
 ** Hole Punch Mechanism
 
 #+begin_example
-A 🠢 B   m(FINDNODE)                 hole A 🠠 B created
+A → B   m(FINDNODE)                 hole A ← B created
 ...timeout...
 
-A 🠢 R   n(RELAYINIT: B)
-R 🠢 B   n(RELAYMSG: A)
-A 🠠 B   challenge(d)                hole A 🠢 B created
-A 🠢 B   h(FINDNODE, response(d))
-A 🠠 B   m(NODES)
-A 🠠 B   m(NODES)
-A 🠠 B   m(NODES)
+A → R   n(RELAYINIT: B)
+R → B   n(RELAYMSG: A)
+A ← B   challenge(d)                hole A → B created
+A → B   h(FINDNODE, response(d))
+A ← B   m(NODES)
+A ← B   m(NODES)
+A ← B   m(NODES)
 #+end_example
 
 * Portal Network
@@ -200,11 +200,11 @@ A 🠠 B   m(NODES)
 ** Stream Example
 
 #+begin_example
-A 🠢 B  TALKREQ (... initiator-secret, request data ...)
-A 🠠 B  TALKRESP (... recipient-secret, accept/rej ...)
-A 🠢 B  encrypted sub-protocol packet (µTP)
-A 🠠 B  encrypted sub-protocol packet (µTP)
-A 🠠 B  encrypted sub-protocol packet (µTP)
+A → B  TALKREQ (... initiator-secret, request data ...)
+A ← B  TALKRESP (... recipient-secret, accept/rej ...)
+A → B  encrypted sub-protocol packet (µTP)
+A ← B  encrypted sub-protocol packet (µTP)
+A ← B  encrypted sub-protocol packet (µTP)
 #+end_example
 
 * Service Discovery
