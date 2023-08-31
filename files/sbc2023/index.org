@@ -166,6 +166,12 @@ Record has sequence number 20 and 6 key/value pairs.
 - ethereumjs CL/EL
 - nethermind (.NET) WIP
 
+** Cat Herding
+
+- differences in safety measures
+- what's spec vs. what's implementer policy
+- how do we check for implementation correctness
+
 * Future Directions
 
 * discv5.2
