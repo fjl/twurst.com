@@ -222,4 +222,5 @@ A ← B  encrypted sub-protocol packet (µTP)
  :END:
 
 - Specs: <https://github.com/ethereum/devp2p>
+- Slides: <https://twurst.com/files/sbc2023>
 - Thank you Matt for KademliaCon :)
